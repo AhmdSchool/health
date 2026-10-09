@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#0b0f1c">
+<title>حاسبة الوزن | AhmdSchool</title>
+<style>
+/* ===== RESET & GLOBAL ===== */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI','Tahoma','Arial',sans-serif; -webkit-tap-highlight-color:transparent; }
+
+:root {
+    --bg1: #0b0f1c;
+    --bg2: #1a1f33;
+    --card-bg: rgba(25,30,50,0.85);
+    --glass-bg: rgba(20,25,45,0.7);
+    --glass-border: rgba(255,255,255,0.1);
+    --primary: #00e0b8;
+    --primary-glow: #00e0b8aa;
+    --text-main: #f0f3fa;
+    --text-dim: #a0a8c0;
+    --shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+    --radius: 24px;
+    --font-mono: 'Courier New', monospace;
+    --c-thin: #4facfe;
+    --c-normal: #2ed573;
+    --c-fat: #ff5e6b;
+    /* Select specific */
+    --select-bg: rgba(15,20,35,0.95);
+    --select-text: #f0f3fa;
+    --select-hover: rgba(0,224,184,0.2);
+}
+
+/* ===== 6 THEMES ===== */
+body[data-theme="dark"] {
+    --bg1:#0b0f1c; --bg2:#1a1f33;
+    --card-bg:rgba(25,30,50,0.85); --glass-bg:rgba(20,25,45,0.7);
+    --text-main:#f0f3fa; --text-dim:#a0a8c0; --primary:#00e0b8;
+    --select-bg: rgba(15,20,35,0.98);
+    --select-text: #f0f3fa;
+    --select-hover: rgba(0,224,184,0.25);
+}
+body[data-theme="light"] {
+    --bg1:#eef2f7; --bg2:#d9e2ec;
+    --card-bg:rgba(255,255,255,0.95); --glass-bg:rgba(255,255,255,0.85);
+    --glass-border:rgba(0,0,0,0.1);
+    --text-main:#1a1f33; --text-dim:#5a6478; --primary:#008f7a;
+    --shadow:0 25px 50px -12px rgba(0,0,0,0.15);
+    --select-bg: #ffffff;
+    --select-text: #1a1f33;
+    --select-hover: rgba(0,143,122,0.15);
+}
+body[data-theme="ocean"] {
+    --bg1:#021b2e; --bg2:#053b5e;
+    --card-bg:rgba(8,45,72,0.9); --glass-bg:rgba(8,45,72,0.75);
+    --text-main:#e0f4ff; --text-dim:#8bb8d4; --primary:#4facfe;
+    --select-bg: rgba(5,35,58,0.98);
+    --select-text: #e0f4ff;
+    --select-hover: rgba(79,172,254,0.25);
+}
+body[data-theme="sunset"] {
+    --bg1:#2d0a1e; --bg2:#5c1a3a;
+    --card-bg:rgba(60,15,35,0.9); --glass-bg:rgba(60,15,35,0.75);
+    --text-main:#ffe4ec; --text-dim:#d494ac; --primary:#ff6b9d;
+    --select-bg: rgba(50,12,30,0.98);
+    --select-text: #ffe4ec;
+    --select-hover: rgba(255,107,157,0.25);
+}
+body[data-theme="forest"] {
+    --bg1:#0a1f14; --bg2:#173d29;
+    --card-bg:rgba(20,55,35,0.9); --glass-bg:rgba(20,55,35,0.75);
+    --text-main:#e2f5e8; --text-dim:#8bbf9c; --primary:#4ade80;
+    --select-bg: rgba(15,45,28,0.98);
+    --select-text: #e2f5e8;
+    --select-hover: rgba(74,222,128,0.25);
+}
+body[data-theme="royal"] {
+    --bg1:#1a0b2e; --bg2:#2d1b4e;
+    --card-bg:rgba(45,27,78,0.9); --glass-bg:rgba(45,27,78,0.75);
+    --text-main:#f0e6ff; --text-dim:#b8a0d4; --primary:#c084fc;
+    --select-bg: rgba(35,20,60,0.98);
+    --select-text: #f0e6ff;
+    --select-hover: rgba(192,132,252,0.25);
+}
+
+body {
+    background: linear-gradient(145deg, var(--bg1) 0%, var(--bg2) 100%);
+    min-height:100vh; color:var(--text-main);
+    padding:14px; transition: background 0.4s, color 0.3s;
+    overflow-x:hidden;
+}
+
+.app-container {
+    width:100%; max-width:1280px; margin:0 auto;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s;
+    min-height: calc(100vh - 28px);
+}
+
+/* ===== TOP BAR ===== */
+.top-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; margin-bottom:18px; flex-wrap:wrap;
+    position:relative; z-index:5;
+}
+.brand { display:flex; align-items:center; gap:10px; }
+.brand-logo {
+    width:44px; height:44px; border-radius:14px;
+    background: linear-gradient(135deg, var(--primary), var(--c-normal));
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; box-shadow:0 8px 20px var(--primary-glow);
+    flex-shrink:0;
+}
+.brand-text h1 { font-size:1.15rem; font-weight:800; background:linear-gradient(135deg, var(--primary), var(--c-thin)); -webkit-background-clip:text; background-clip:text; color:transparent; letter-spacing:-0.3px; }
+.brand-text p { font-size:0.65rem; color:var(--text-dim); letter-spacing:1px; }
+
+.top-actions { display:flex; align-items:center; gap:8px; }
+
+.icon-btn {
+    width:44px; height:44px; border-radius:14px;
+    background: rgba(0,0,0,0.3);
+    border:1.5px solid var(--glass-border);
+    color: var(--text-main);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; cursor:pointer; transition: all 0.25s;
+    position:relative;
+}
+body[data-theme="light"] .icon-btn { background: rgba(255,255,255,0.6); }
+.icon-btn:hover { border-color:var(--primary); color:var(--primary); transform:translateY(-2px); box-shadow:0 8px 20px var(--primary-glow); }
+
+.theme-picker { position:relative; }
+.theme-menu {
+    position:absolute; top:52px; left:0;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border:1px solid var(--glass-border);
+    border-radius:16px; padding:10px;
+    display:none; grid-template-columns:repeat(3,1fr); gap:8px;
+    z-index:100; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    min-width:220px;
+}
+.theme-menu.show { display:grid; }
+.theme-swatch {
+    width:100%; height:48px; border-radius:12px; cursor:pointer;
+    border:2px solid transparent; transition:all 0.2s;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:#fff; font-weight:600; text-shadow:0 1px 3px rgba(0,0,0,0.5);
+}
+.theme-swatch:hover { transform:scale(1.05); border-color:var(--primary); }
+.theme-swatch.active { border-color:var(--primary); box-shadow:0 0 0 2px var(--primary-glow); }
+
+/* ===== TABS ===== */
+.tabs {
+    display:flex; gap:6px; margin-bottom:18px;
+    background: rgba(0,0,0,0.25);
+    padding:6px; border-radius:16px;
+    overflow-x:auto; scrollbar-width:none;
+    position:relative; z-index:2;
+}
+body[data-theme="light"] .tabs { background: rgba(0,0,0,0.06); }
+.tabs::-webkit-scrollbar { display:none; }
+.tab-btn {
+    flex:1; min-width:90px; padding:10px 12px;
+    border:none; background:transparent; color:var(--text-dim);
+    border-radius:12px; cursor:pointer; font-weight:700;
+    font-size:0.78rem; transition:all 0.25s; white-space:nowrap;
+    display:flex; align-items:center; justify-content:center; gap:5px;
+}
+.tab-btn.active { background: linear-gradient(135deg, var(--primary), var(--c-normal)); color:#0b0f1c; box-shadow:0 6px 16px var(--primary-glow); }
+.tab-btn:not(.active):hover { background: rgba(255,255,255,0.06); color:var(--text-main); }
+body[data-theme="light"] .tab-btn:not(.active):hover { background: rgba(0,0,0,0.05); }
+
+.tab-panel { display:none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+/* ===== CARDS ===== */
+.card {
+    background: var(--card-bg);
+    border:1px solid var(--glass-border);
+    border-radius:20px; padding:16px;
+    margin-bottom:14px;
+}
+.section-title {
+    font-size:0.95rem; font-weight:700; margin-bottom:12px;
+    display:flex; align-items:center; gap:8px;
+    color: var(--text-main);
+}
+.section-title::before {
+    content:''; width:4px; height:18px;
+    background: linear-gradient(180deg, var(--primary), var(--c-normal));
+    border-radius:4px;
+}
+
+/* ===== PEOPLE GRID ===== */
+.people-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap:12px;
+}
+
+.person-card {
+    background: rgba(0,0,0,0.3);
+    border:1.5px solid var(--glass-border);
+    border-radius:18px; padding:14px;
+    transition: all 0.3s;
+    position:relative;
+    overflow:hidden;
+    animation: slideIn 0.4s ease;
+}
+body[data-theme="light"] .person-card { background: rgba(255,255,255,0.6); }
+@keyframes slideIn { from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+
+.person-card:hover { transform:translateY(-3px); border-color:var(--primary); box-shadow:0 12px 30px rgba(0,0,0,0.3); }
+
+.person-card.rank-1 { border-color:#ffd700; box-shadow: 0 0 25px rgba(255,215,0,0.25); }
+.person-card.rank-1::after {
+    content:'👑 الأفضل'; position:absolute; top:0; left:0;
+    background: linear-gradient(135deg, #ffd700, #ffb347);
+    color:#1a1f33; font-size:0.65rem; font-weight:800;
+    padding:4px 12px; border-bottom-right-radius:14px;
+}
+
+.person-head { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.avatar {
+    width:56px; height:56px; border-radius:50%;
+    background: linear-gradient(135deg, var(--primary), var(--c-normal));
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; font-weight:800; color:#0b0f1c;
+    overflow:hidden; flex-shrink:0;
+    border:2px solid rgba(255,255,255,0.15);
+}
+.avatar img { width:100%; height:100%; object-fit:cover; }
+.person-info h3 { font-size:1rem; font-weight:700; margin-bottom:3px; color:var(--text-main); }
+.person-info .person-meta { font-size:0.7rem; color:var(--text-dim); }
+.person-info .person-contact { font-size:0.68rem; color:var(--text-dim); margin-top:2px; }
+
+.person-bmi-row {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px; margin-bottom:10px;
+}
+.person-bmi { font-size:1.8rem; font-weight:800; font-family:var(--font-mono); line-height:1; }
+.person-status {
+    padding:5px 14px; border-radius:20px;
+    font-size:0.72rem; font-weight:700;
+    border:1.5px solid;
+}
+.status-thin { background:rgba(79,172,254,0.15); color:var(--c-thin); border-color:var(--c-thin); }
+.status-normal { background:rgba(46,213,115,0.15); color:var(--c-normal); border-color:var(--c-normal); }
+.status-fat { background:rgba(255,94,107,0.15); color:var(--c-fat); border-color:var(--c-fat); }
+
+.person-diff {
+    background: rgba(0,0,0,0.25);
+    border-radius:12px; padding:8px 12px;
+    font-size:0.78rem; display:flex; justify-content:space-between;
+    align-items:center; margin-bottom:8px;
+    color: var(--text-main);
+}
+body[data-theme="light"] .person-diff { background: rgba(0,0,0,0.05); }
+.person-diff strong { font-family:var(--font-mono); font-size:0.95rem; }
+
+.person-notes {
+    background: rgba(0,224,184,0.06);
+    border:1px dashed var(--glass-border);
+    border-radius:12px; padding:8px 12px;
+    font-size:0.72rem; color:var(--text-dim);
+    margin-bottom:10px; line-height:1.5;
+}
+
+.person-actions { display:flex; gap:6px; }
+.person-actions button {
+    flex:1; padding:7px 8px; border-radius:10px;
+    border:1.5px solid var(--glass-border);
+    background: rgba(0,0,0,0.25); color:var(--text-main);
+    font-size:0.7rem; cursor:pointer; transition:all 0.2s;
+    font-weight:600;
+}
+body[data-theme="light"] .person-actions button { background: rgba(255,255,255,0.6); }
+.person-actions button:hover { background:var(--primary); color:#0b0f1c; border-color:var(--primary); }
+
+/* ===== FORM ===== */
+.form-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap:10px; margin-bottom:14px;
+}
+.input-box {
+    background: rgba(0,0,0,0.3);
+    border:1.5px solid var(--glass-border);
+    border-radius:14px; padding:10px 12px;
+    transition: all 0.25s;
+}
+body[data-theme="light"] .input-box { background: rgba(255,255,255,0.7); }
+.input-box:focus-within { border-color:var(--primary); box-shadow:0 0 18px var(--primary-glow); }
+.input-box label { display:block; font-size:0.68rem; color:var(--text-dim); margin-bottom:5px; letter-spacing:0.4px; }
+.input-box input, .input-box select, .input-box textarea {
+    width:100%; background:transparent; border:none;
+    color:var(--text-main); font-size:0.95rem; font-weight:600;
+    outline:none; font-family:var(--font-mono);
+    resize:vertical;
+}
+.input-box textarea { min-height:50px; font-family:'Segoe UI',Tahoma,Arial; font-weight:500; }
+.input-box input::placeholder, .input-box textarea::placeholder { color:var(--text-dim); opacity:0.5; }
+
+/* ===== CUSTOM SELECT STYLING (FIX) ===== */
+.input-box select,
+select#planPersonSelect {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300e0b8' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 12px center;
+    background-size: 12px;
+    padding-left: 32px !important;
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Arial;
+    font-weight: 600;
+    cursor: pointer;
+}
+body[data-theme="light"] .input-box select,
+body[data-theme="light"] select#planPersonSelect {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23008f7a' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+}
+
+/* Critical: options inside select must have explicit bg + color */
+.input-box select option,
+select#planPersonSelect option {
+    background: var(--select-bg) !important;
+    color: var(--select-text) !important;
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Arial;
+    font-weight: 500;
+}
+
+.input-box select option:checked,
+select#planPersonSelect option:checked {
+    background: var(--select-hover) !important;
+    color: var(--primary) !important;
+    font-weight: 700;
+}
+
+.input-box select:focus option:checked {
+    background: var(--select-hover) !important;
+    color: var(--primary) !important;
+}
+
+/* Standalone select (plan tab) */
+select#planPersonSelect {
+    background-color: rgba(0,0,0,0.3) !important;
+    border:1.5px solid var(--glass-border);
+    border-radius:14px;
+    padding:12px 40px 12px 16px;
+    font-size:0.9rem;
+    color: var(--text-main);
+    width:100%;
+    outline: none;
+    transition: all 0.25s;
+}
+body[data-theme="light"] select#planPersonSelect {
+    background-color: rgba(255,255,255,0.8) !important;
+}
+select#planPersonSelect:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 18px var(--primary-glow);
+}
+
+/* ===== PHOTO UPLOAD ===== */
+.photo-upload { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.photo-preview {
+    width:64px; height:64px; border-radius:50%;
+    background: rgba(0,0,0,0.3);
+    border:2px dashed var(--glass-border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; color:var(--text-dim);
+    overflow:hidden; cursor:pointer; flex-shrink:0;
+    transition: all 0.25s;
+}
+body[data-theme="light"] .photo-preview { background: rgba(255,255,255,0.6); }
+.photo-preview:hover { border-color:var(--primary); color:var(--primary); }
+.photo-preview img { width:100%; height:100%; object-fit:cover; }
+.upload-hint { font-size:0.72rem; color:var(--text-dim); }
+
+/* ===== BUTTONS ===== */
+.btn {
+    padding:11px 18px; border-radius:14px;
+    border:1.5px solid var(--glass-border);
+    background: rgba(0,0,0,0.3); color:var(--text-main);
+    font-size:0.82rem; font-weight:700; cursor:pointer;
+    transition: all 0.25s; display:inline-flex; align-items:center;
+    justify-content:center; gap:7px; letter-spacing:0.3px;
+}
+body[data-theme="light"] .btn { background: rgba(255,255,255,0.7); }
+.btn:hover { transform:translateY(-2px); border-color:var(--primary); box-shadow:0 8px 20px var(--primary-glow); }
+.btn:active { transform:translateY(0); }
+.btn-primary { background:linear-gradient(135deg, var(--primary), var(--c-normal)); color:#0b0f1c; border-color:transparent; }
+.btn-primary:hover { box-shadow:0 10px 30px var(--primary-glow); }
+.btn-danger { background:rgba(255,94,107,0.15); color:var(--c-fat); border-color:var(--c-fat); }
+.btn-row { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ===== RANGE SLIDERS ===== */
+.range-group {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:12px;
+}
+.range-item {
+    background: rgba(0,0,0,0.25);
+    border:1px solid var(--glass-border);
+    border-radius:14px; padding:12px;
+}
+body[data-theme="light"] .range-item { background: rgba(255,255,255,0.6); }
+.range-item label {
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.78rem; margin-bottom:10px; font-weight:700;
+    color: var(--text-main);
+}
+.range-item label span:last-child {
+    font-family:var(--font-mono); color:var(--primary);
+    background: rgba(0,224,184,0.1); padding:2px 10px;
+    border-radius:8px; font-size:0.75rem;
+}
+input[type="range"] {
+    width:100%; height:6px; border-radius:3px;
+    background: rgba(255,255,255,0.1);
+    outline:none; -webkit-appearance:none; appearance:none;
+}
+body[data-theme="light"] input[type="range"] { background: rgba(0,0,0,0.1); }
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance:none; appearance:none;
+    width:22px; height:22px; border-radius:50%;
+    background: linear-gradient(135deg, var(--primary), var(--c-normal));
+    cursor:pointer; box-shadow:0 4px 12px var(--primary-glow);
+    border:2px solid rgba(255,255,255,0.2);
+}
+input[type="range"]::-moz-range-thumb {
+    width:22px; height:22px; border-radius:50%;
+    background: linear-gradient(135deg, var(--primary), var(--c-normal));
+    cursor:pointer; box-shadow:0 4px 12px var(--primary-glow);
+    border:2px solid rgba(255,255,255,0.2);
+}
+
+/* ===== MEAL TIPS ===== */
+.meal-tips {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:10px;
+}
+.tip {
+    background: rgba(0,0,0,0.25);
+    border:1px solid var(--glass-border);
+    border-radius:14px; padding:12px;
+    transition:all 0.25s;
+}
+body[data-theme="light"] .tip { background: rgba(255,255,255,0.6); }
+.tip:hover { border-color:var(--primary); transform:translateY(-2px); }
+.tip-icon { font-size:1.6rem; margin-bottom:6px; }
+.tip h4 { font-size:0.85rem; margin-bottom:5px; color:var(--primary); }
+.tip p { font-size:0.72rem; color:var(--text-dim); line-height:1.5; }
+.tip ul { margin:6px 14px 0 0; font-size:0.72rem; color:var(--text-dim); line-height:1.7; }
+
+/* ===== PLAN CARD ===== */
+.plan-card {
+    background: linear-gradient(135deg, rgba(0,224,184,0.08), rgba(46,213,115,0.04));
+    border:1.5px solid var(--primary);
+    border-radius:18px; padding:18px;
+    margin-bottom:14px;
+}
+body[data-theme="light"] .plan-card {
+    background: linear-gradient(135deg, rgba(0,143,122,0.08), rgba(46,213,115,0.04));
+}
+.plan-card h3 { font-size:1rem; margin-bottom:10px; display:flex; align-items:center; gap:8px; color:var(--text-main); }
+.plan-card p { font-size:0.8rem; color:var(--text-dim); line-height:1.7; margin-bottom:8px; }
+.week-grid {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:8px; margin-top:12px;
+}
+.day-chip {
+    background:rgba(0,0,0,0.3);
+    border:1px solid var(--glass-border);
+    border-radius:12px; padding:10px;
+    font-size:0.72rem;
+    color: var(--text-main);
+}
+body[data-theme="light"] .day-chip { background: rgba(255,255,255,0.6); }
+.day-chip strong { display:block; color:var(--primary); margin-bottom:4px; font-size:0.78rem; }
+
+/* ===== COMPARE BAR ===== */
+.compare-bar {
+    display:flex; height:32px; border-radius:16px; overflow:hidden;
+    margin-bottom:6px; border:1px solid var(--glass-border);
+}
+.compare-seg { display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.65rem; font-weight:700; text-shadow:0 1px 2px rgba(0,0,0,0.5); }
+.seg-thin { background:var(--c-thin); }
+.seg-normal { background:var(--c-normal); }
+.seg-fat { background:var(--c-fat); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px); z-index:1000;
+    display:none; align-items:center; justify-content:center;
+    padding:16px; animation: fadeIn 0.25s;
+}
+.modal-overlay.show { display:flex; }
+.modal {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border:1px solid var(--glass-border);
+    border-radius:22px; padding:20px;
+    max-width:440px; width:100%; max-height:90vh; overflow-y:auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    animation: slideUp 0.3s ease;
+    color: var(--text-main);
+}
+@keyframes slideUp { from{opacity:0; transform:translateY(30px) scale(0.95);} to{opacity:1; transform:translateY(0) scale(1);} }
+.modal h2 { font-size:1.1rem; margin-bottom:14px; display:flex; align-items:center; gap:8px; color:var(--text-main); }
+.modal-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+
+.share-list { display:flex; flex-direction:column; gap:8px; }
+.share-list button {
+    padding:12px 16px; border-radius:14px;
+    border:1.5px solid var(--glass-border);
+    background: rgba(0,0,0,0.3); color:var(--text-main);
+    font-size:0.85rem; cursor:pointer; text-align:right;
+    display:flex; align-items:center; gap:10px;
+    transition: all 0.2s; font-weight:600;
+}
+body[data-theme="light"] .share-list button { background: rgba(255,255,255,0.7); }
+.share-list button:hover { background: rgba(0,224,184,0.12); border-color:var(--primary); transform:translateX(-3px); }
+
+/* ===== TOAST ===== */
+.toast {
+    position:fixed; bottom:24px; left:50%;
+    transform: translateX(-50%) translateY(120px);
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border:1.5px solid var(--primary);
+    border-radius:50px; padding:12px 26px;
+    font-size:0.85rem; font-weight:600;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    z-index:2000; pointer-events:none; white-space:nowrap;
+    max-width:90vw; overflow:hidden; text-overflow:ellipsis;
+    color: var(--text-main);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align:center; margin-top:18px; padding-top:14px;
+    border-top:1px solid var(--glass-border);
+    font-size:0.72rem; color:var(--text-dim); line-height:1.8;
+}
+.footer a { color:var(--primary); text-decoration:none; font-weight:700; }
+.footer a:hover { text-decoration:underline; }
+.footer .copyright { font-weight:700; color:var(--text-main); }
+
+/* ===== EMPTY STATE ===== */
+.empty-state { text-align:center; padding:30px 16px; color:var(--text-dim); font-size:0.85rem; }
+.empty-state .icon { font-size:3rem; margin-bottom:10px; opacity:0.5; }
+
+/* ============================================
+   GUEST CALCULATOR
+   ============================================ */
+.guest-hero {
+    background: linear-gradient(135deg, rgba(0,224,184,0.12), rgba(79,172,254,0.08));
+    border:1.5px solid var(--primary);
+    border-radius:22px; padding:22px 18px;
+    text-align:center; margin-bottom:16px;
+    position:relative; overflow:hidden;
+}
+.guest-hero::before {
+    content:''; position:absolute;
+    top:-60px; right:-60px; width:180px; height:180px;
+    background: radial-gradient(circle, var(--primary-glow), transparent 70%);
+    pointer-events:none;
+}
+.guest-hero h2 {
+    font-size:1.4rem; margin-bottom:6px;
+    background: linear-gradient(135deg, var(--primary), var(--c-thin));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.guest-hero p { font-size:0.85rem; color:var(--text-dim); margin-bottom:16px; }
+
+.guest-form {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:10px; margin-bottom:14px;
+}
+
+.infographic {
+    background: linear-gradient(160deg, rgba(0,0,0,0.35), rgba(0,224,184,0.05));
+    border:1.5px solid var(--glass-border);
+    border-radius:24px; padding:24px 18px;
+    margin-top:16px;
+    position:relative; overflow:hidden;
+    animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+body[data-theme="light"] .infographic {
+    background: linear-gradient(160deg, rgba(255,255,255,0.7), rgba(0,143,122,0.05));
+}
+@keyframes popIn { from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
+
+.info-ring-wrap {
+    display:flex; justify-content:center; align-items:center;
+    margin-bottom:16px;
+}
+.info-ring { position:relative; width:220px; height:220px; }
+.info-ring svg { width:100%; height:100%; transform:rotate(-90deg); }
+.ring-bg { fill:none; stroke:rgba(255,255,255,0.08); stroke-width:14; }
+body[data-theme="light"] .ring-bg { stroke:rgba(0,0,0,0.08); }
+.ring-fill {
+    fill:none; stroke-width:14; stroke-linecap:round;
+    transition: stroke-dashoffset 1s ease, stroke 0.4s;
+    stroke-dasharray: 628;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+.ring-center {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+}
+.ring-center .rc-value {
+    font-size:3rem; font-weight:800;
+    font-family:var(--font-mono); line-height:1;
+}
+.ring-center .rc-label {
+    font-size:0.7rem; color:var(--text-dim);
+    letter-spacing:1.5px; margin-top:4px;
+}
+.ring-center .rc-status {
+    margin-top:8px; padding:4px 16px;
+    border-radius:20px; font-size:0.78rem;
+    font-weight:700; border:1.5px solid;
+}
+
+.stat-tiles {
+    display:grid; grid-template-columns:repeat(2,1fr);
+    gap:10px; margin-bottom:14px;
+}
+.stat-tile {
+    background: rgba(0,0,0,0.3);
+    border:1px solid var(--glass-border);
+    border-radius:16px; padding:14px 12px;
+    text-align:center; transition:all 0.25s;
+    position:relative; overflow:hidden;
+}
+body[data-theme="light"] .stat-tile { background: rgba(255,255,255,0.7); }
+.stat-tile:hover { transform:translateY(-3px); border-color:var(--primary); }
+.stat-tile .st-icon { font-size:1.4rem; margin-bottom:6px; }
+.stat-tile .st-value { font-size:1.2rem; font-weight:800; font-family:var(--font-mono); margin-bottom:3px; }
+.stat-tile .st-label { font-size:0.68rem; color:var(--text-dim); letter-spacing:0.5px; }
+
+.target-bar-wrap {
+    background: rgba(0,0,0,0.3);
+    border-radius:16px; padding:14px;
+    margin-bottom:14px;
+    border:1px solid var(--glass-border);
+}
+body[data-theme="light"] .target-bar-wrap { background: rgba(255,255,255,0.6); }
+.target-bar-header {
+    display:flex; justify-content:space-between;
+    font-size:0.78rem; margin-bottom:10px;
+    font-weight:700;
+}
+.target-bar {
+    height:16px; border-radius:8px;
+    background: rgba(0,0,0,0.4);
+    overflow:hidden; position:relative;
+}
+body[data-theme="light"] .target-bar { background: rgba(0,0,0,0.1); }
+.target-bar-fill {
+    height:100%; border-radius:8px;
+    transition: width 1s ease;
+    background: linear-gradient(90deg, var(--c-thin), var(--c-normal));
+    position:relative;
+}
+.target-bar-fill::after {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+@keyframes shimmer { 0%{transform:translateX(-100%);} 100%{transform:translateX(100%);} }
+
+.expert-box {
+    background: linear-gradient(135deg, rgba(0,224,184,0.08), rgba(79,172,254,0.04));
+    border:1.5px dashed var(--primary);
+    border-radius:18px; padding:16px;
+    margin-bottom:12px;
+}
+body[data-theme="light"] .expert-box {
+    background: linear-gradient(135deg, rgba(0,143,122,0.06), rgba(79,172,254,0.04));
+}
+.expert-box h3 {
+    font-size:0.95rem; margin-bottom:10px;
+    display:flex; align-items:center; gap:8px;
+    color:var(--primary);
+}
+.expert-box p { font-size:0.78rem; color:var(--text-dim); line-height:1.8; }
+
+.guest-actions {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:8px; margin-top:14px;
+}
+
+/* Responsive */
+@media (max-width:640px) {
+    body { padding:8px; }
+    .app-container { padding:14px; border-radius:18px; }
+    .brand-text h1 { font-size:1rem; }
+    .brand-text p { font-size:0.6rem; }
+    .brand-logo { width:38px; height:38px; font-size:20px; }
+    .icon-btn { width:40px; height:40px; font-size:16px; }
+    .tab-btn { font-size:0.68rem; padding:9px 6px; min-width:70px; }
+    .people-grid { grid-template-columns:1fr; }
+    .form-grid { grid-template-columns:1fr 1fr; }
+    .stat-tiles { grid-template-columns:1fr 1fr; }
+    .info-ring { width:180px; height:180px; }
+    .ring-center .rc-value { font-size:2.4rem; }
+    .guest-actions { grid-template-columns:1fr; }
+}
+
+@media (min-width:1024px) {
+    .app-container { padding:28px; }
+}
+
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--primary-glow); border-radius:8px; }
+</style>
+</head>
+<body data-theme="dark">
+
+<div class="app-container">
+
+    <!-- ===== TOP BAR ===== -->
+    <div class="top-bar">
+        <div class="brand">
+            <div class="brand-logo">⚖️</div>
+            <div class="brand-text">
+                <h1>حاسبة الوزن</h1>
+                <p>AhmdSchool • إدارة متعددة</p>
+            </div>
+        </div>
+        <div class="top-actions">
+            <div class="theme-picker">
+                <button class="icon-btn" id="themeBtn" title="تغيير المظهر">🎨</button>
+                <div class="theme-menu" id="themeMenu">
+                    <div class="theme-swatch active" data-theme="dark" style="background:linear-gradient(135deg,#0b0f1c,#1a1f33)">داكن</div>
+                    <div class="theme-swatch" data-theme="light" style="background:linear-gradient(135deg,#eef2f7,#d9e2ec); color:#1a1f33; text-shadow:none;">فاتح</div>
+                    <div class="theme-swatch" data-theme="ocean" style="background:linear-gradient(135deg,#021b2e,#053b5e)">محيط</div>
+                    <div class="theme-swatch" data-theme="sunset" style="background:linear-gradient(135deg,#2d0a1e,#5c1a3a)">غروب</div>
+                    <div class="theme-swatch" data-theme="forest" style="background:linear-gradient(135deg,#0a1f14,#173d29)">غابة</div>
+                    <div class="theme-swatch" data-theme="royal" style="background:linear-gradient(135deg,#1a0b2e,#2d1b4e)">ملكي</div>
+                </div>
+            </div>
+            <button class="icon-btn" id="exportBtn" title="تصدير البيانات">📦</button>
+            <button class="icon-btn" id="importBtn" title="استيراد البيانات">📥</button>
+        </div>
+    </div>
+
+    <!-- ===== TABS ===== -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="dashboard">🏠 لوحة</button>
+        <button class="tab-btn" data-tab="manage">👥 إدارة</button>
+        <button class="tab-btn" data-tab="compare">📊 مقارنة</button>
+        <button class="tab-btn" data-tab="plan">📋 الخطة</button>
+        <button class="tab-btn" data-tab="guest">🆓 حاسبة سريعة</button>
+    </div>
+
+    <!-- ===== TAB: DASHBOARD ===== -->
+    <div class="tab-panel active" id="tab-dashboard">
+        <div id="dashboardContent"></div>
+    </div>
+
+    <!-- ===== TAB: MANAGE ===== -->
+    <div class="tab-panel" id="tab-manage">
+        <div class="card">
+            <div class="section-title" id="formTitle">➕ إضافة شخص جديد</div>
+
+            <div class="photo-upload">
+                <div class="photo-preview" id="photoPreview" title="اضغط لرفع صورة">📷</div>
+                <div>
+                    <div style="font-size:0.85rem; font-weight:700; margin-bottom:3px; color:var(--text-main);">صورة الشخص</div>
+                    <div class="upload-hint">اضغط على الأيقونة لرفع صورة (اختياري)</div>
+                </div>
+                <input type="file" id="photoInput" accept="image/*" style="display:none;">
+            </div>
+
+            <div class="form-grid">
+                <div class="input-box">
+                    <label>الاسم *</label>
+                    <input type="text" id="fName" placeholder="مثال: أحمد">
+                </div>
+                <div class="input-box">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" id="fPhone" placeholder="+20 10xxxxxxxx" dir="ltr" style="text-align:right;">
+                </div>
+                <div class="input-box">
+                    <label>الوزن (كجم) *</label>
+                    <input type="number" id="fWeight" placeholder="70" step="0.1" min="1" max="500">
+                </div>
+                <div class="input-box">
+                    <label>الطول (سم) *</label>
+                    <input type="number" id="fHeight" placeholder="170" step="0.1" min="50" max="250">
+                </div>
+                <div class="input-box">
+                    <label>العمر (سنة)</label>
+                    <input type="number" id="fAge" placeholder="25" step="1" min="1" max="120" value="25">
+                </div>
+                <div class="input-box">
+                    <label>الجنس</label>
+                    <select id="fGender">
+                        <option value="male">ذكر</option>
+                        <option value="female">أنثى</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label>مستوى النشاط</label>
+                    <select id="fActivity">
+                        <option value="1.2">قليل الحركة</option>
+                        <option value="1.375" selected>نشاط خفيف</option>
+                        <option value="1.55">نشاط متوسط</option>
+                        <option value="1.725">نشاط عالي</option>
+                        <option value="1.9">رياضي</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-box" style="margin-bottom:14px;">
+                <label>📝 ملاحظات (حالة صحية، حساسية، أدوية، أهداف...)</label>
+                <textarea id="fNotes" placeholder="مثال: يعاني من حساسية اللاكتوز، يهدف لخسارة 5 كجم في 3 أشهر..."></textarea>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" id="savePersonBtn">💾 حفظ الشخص</button>
+                <button class="btn" id="resetFormBtn">↺ إعادة تعيين</button>
+                <button class="btn btn-danger" id="cancelEditBtn" style="display:none;">✖ إلغاء التعديل</button>
+            </div>
+        </div>
+
+        <!-- ===== RANGE SETTINGS ===== -->
+        <div class="card">
+            <div class="section-title">⚙️ إعدادات النطاقات الغذائية</div>
+            <p style="font-size:0.75rem; color:var(--text-dim); margin-bottom:12px; line-height:1.6;">
+                يمكنك تخصيص النطاقات لكل شخص حسب احتياجه. القيم تُطبق عند عرض الخطة الغذائية.
+            </p>
+            <div class="range-group">
+                <div class="range-item">
+                    <label><span>📈 زيادة سعرات (نحافة)</span><span id="rvDeficit">+400</span></label>
+                    <input type="range" id="rangeDeficit" min="100" max="1000" step="50" value="400">
+                </div>
+                <div class="range-item">
+                    <label><span>📉 نقصان سعرات (سمنة)</span><span id="rvSurplus">-500</span></label>
+                    <input type="range" id="rangeSurplus" min="100" max="1000" step="50" value="500">
+                </div>
+                <div class="range-item">
+                    <label><span>💧 ماء لكل كجم (لتر)</span><span id="rvWater">0.035</span></label>
+                    <input type="range" id="rangeWater" min="0.02" max="0.06" step="0.001" value="0.035">
+                </div>
+                <div class="range-item">
+                    <label><span>🎯 هامش الوزن المثالي (±كجم)</span><span id="rvTolerance">3</span></label>
+                    <input type="range" id="rangeTolerance" min="1" max="10" step="0.5" value="3">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">👥 قائمة الأشخاص (<span id="peopleCount">0</span>)</div>
+            <div id="manageList"></div>
+        </div>
+    </div>
+
+    <!-- ===== TAB: COMPARE ===== -->
+    <div class="tab-panel" id="tab-compare">
+        <div class="card">
+            <div class="section-title">📊 توزيع التصنيفات</div>
+            <div class="compare-bar" id="compareBar"></div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:0.75rem; margin-top:10px; color:var(--text-main);">
+                <span><span style="display:inline-block;width:12px;height:12px;background:var(--c-thin);border-radius:3px;margin-left:4px;vertical-align:middle;"></span>نحافة</span>
+                <span><span style="display:inline-block;width:12px;height:12px;background:var(--c-normal);border-radius:3px;margin-left:4px;vertical-align:middle;"></span>طبيعي</span>
+                <span><span style="display:inline-block;width:12px;height:12px;background:var(--c-fat);border-radius:3px;margin-left:4px;vertical-align:middle;"></span>سمنة</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">🏆 الترتيب حسب القرب من الوزن المثالي</div>
+            <div id="compareList"></div>
+        </div>
+    </div>
+
+    <!-- ===== TAB: PLAN ===== -->
+    <div class="tab-panel" id="tab-plan">
+        <div class="card">
+            <div class="section-title">🎯 اختر شخصاً لعرض خطته</div>
+            <select id="planPersonSelect">
+                <option value="">-- اختر شخصاً --</option>
+            </select>
+        </div>
+        <div id="planContent"></div>
+    </div>
+
+    <!-- ===== TAB: GUEST CALCULATOR ===== -->
+    <div class="tab-panel" id="tab-guest">
+        <div class="guest-hero">
+            <h2>🆓 حاسبة الوزن السريعة</h2>
+            <p>للزوار والضيوف — احصل على تحليل كامل خلال ثوانٍ</p>
+        </div>
+
+        <div class="card">
+            <div class="section-title">📝 أدخل بياناتك</div>
+            <div class="guest-form">
+                <div class="input-box">
+                    <label>الوزن (كجم) *</label>
+                    <input type="number" id="gWeight" placeholder="70" step="0.1" min="1" max="500">
+                </div>
+                <div class="input-box">
+                    <label>الطول (سم) *</label>
+                    <input type="number" id="gHeight" placeholder="170" step="0.1" min="50" max="250">
+                </div>
+                <div class="input-box">
+                    <label>العمر</label>
+                    <input type="number" id="gAge" placeholder="25" value="25" step="1" min="1" max="120">
+                </div>
+                <div class="input-box">
+                    <label>الجنس</label>
+                    <select id="gGender">
+                        <option value="male">ذكر</option>
+                        <option value="female">أنثى</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label>مستوى النشاط</label>
+                    <select id="gActivity">
+                        <option value="1.2">قليل الحركة</option>
+                        <option value="1.375" selected>نشاط خفيف</option>
+                        <option value="1.55">نشاط متوسط</option>
+                        <option value="1.725">نشاط عالي</option>
+                        <option value="1.9">رياضي</option>
+                    </select>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-primary" id="gCalcBtn">🔍 احسب الآن</button>
+                <button class="btn" id="gResetBtn">↺ مسح</button>
+            </div>
+        </div>
+
+        <div id="guestResult"></div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+        <div class="copyright">© 2025 AhmdSchool — جميع الحقوق محفوظة</div>
+        <div>للتواصل والاقتراحات: <a href="mailto:ahmd@gmx.li
+">ahmd@gmx.li</a></div>
+    </div>
+
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">تم بنجاح ✅</div>
+
+<script>
+(function(){
+'use strict';
+
+// ===== STATE =====
+let people = JSON.parse(localStorage.getItem('ws_people') || '[]');
+let settings = JSON.parse(localStorage.getItem('ws_settings') || '{}');
+let editingId = null;
+let currentPhoto = null;
+let currentTheme = localStorage.getItem('ws_theme') || 'dark';
+
+settings = Object.assign({
+    deficit: 400,
+    surplus: 500,
+    waterPerKg: 0.035,
+    tolerance: 3
+}, settings);
+
+const $ = id => document.getElementById(id);
+const toast = $('toast');
+const modalOverlay = $('modalOverlay');
+const modalContent = $('modalContent');
+
+// ===== UTILS =====
+function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+function uid() { return 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2,7); }
+function calcBMI(w, h) { if (!w || !h) return 0; return w / ((h/100) ** 2); }
+
+function getCategory(bmi) {
+    if (bmi < 18.5) return { key:'thin', label:'نحافة', color:'var(--c-thin)', cls:'status-thin', hex:'#4facfe' };
+    if (bmi < 25)  return { key:'normal', label:'طبيعي', color:'var(--c-normal)', cls:'status-normal', hex:'#2ed573' };
+    return { key:'fat', label:'سمنة', color:'var(--c-fat)', cls:'status-fat', hex:'#ff5e6b' };
+}
+
+function getIdealWeight(height, gender, age) {
+    if (!height) return 0;
+    const inches = height / 2.54;
+    let base;
+    if (inches > 60) {
+        base = gender === 'female' ? 45.5 + 2.3*(inches-60) : 50 + 2.3*(inches-60);
+    } else {
+        base = gender === 'female' ? 45.5*(inches/60) : 50*(inches/60);
+    }
+    if (age > 40) base *= 1.02;
+    if (age > 60) base *= 1.03;
+    return base;
+}
+
+function getCalories(w, h, age, gender, activity) {
+    if (!w || !h) return 0;
+    const bmr = gender === 'female'
+        ? 10*w + 6.25*h - 5*age - 161
+        : 10*w + 6.25*h - 5*age + 5;
+    return Math.round(bmr * parseFloat(activity || 1.375));
+}
+
+function getWater(w) { return (w * settings.waterPerKg).toFixed(1); }
+function getDiffInfo(person) {
+    const ideal = getIdealWeight(person.height, person.gender, person.age);
+    const diff = person.weight - ideal;
+    return { ideal, diff };
+}
+function save() { localStorage.setItem('ws_people', JSON.stringify(people)); }
+function saveSettings() { localStorage.setItem('ws_settings', JSON.stringify(settings)); }
+
+function escapeHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ===== THEME =====
+function applyTheme(t) {
+    currentTheme = t;
+    document.body.setAttribute('data-theme', t);
+    localStorage.setItem('ws_theme', t);
+    document.querySelectorAll('.theme-swatch').forEach(el => {
+        el.classList.toggle('active', el.dataset.theme === t);
+    });
+    // Update theme-color meta
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+        const colors = { dark:'#0b0f1c', light:'#eef2f7', ocean:'#021b2e', sunset:'#2d0a1e', forest:'#0a1f14', royal:'#1a0b2e' };
+        meta.setAttribute('content', colors[t] || '#0b0f1c');
+    }
+}
+
+// ===== TABS =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $('tab-' + btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'dashboard') renderDashboard();
+        if (btn.dataset.tab === 'manage') renderManage();
+        if (btn.dataset.tab === 'compare') renderCompare();
+        if (btn.dataset.tab === 'plan') renderPlanSelect();
+    });
+});
+
+// ===== THEME PICKER =====
+$('themeBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    $('themeMenu').classList.toggle('show');
+});
+document.querySelectorAll('.theme-swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+        applyTheme(sw.dataset.theme);
+        $('themeMenu').classList.remove('show');
+        showToast('🎨 تم تغيير المظهر');
+    });
+});
+document.addEventListener('click', (e) => {
+    if (!$('themeMenu').contains(e.target) && e.target !== $('themeBtn')) {
+        $('themeMenu').classList.remove('show');
+    }
+});
+
+// ===== RANGE SETTINGS =====
+function bindRange(id, key, displayId, format) {
+    const input = $(id);
+    const display = $(displayId);
+    if (!input) return;
+    input.value = settings[key];
+    display.textContent = format(settings[key]);
+    input.addEventListener('input', () => {
+        settings[key] = parseFloat(input.value);
+        display.textContent = format(settings[key]);
+        saveSettings();
+        renderDashboard();
+        renderCompare();
+        renderPlan();
+    });
+}
+bindRange('rangeDeficit', 'deficit', 'rvDeficit', v => '+' + v);
+bindRange('rangeSurplus', 'surplus', 'rvSurplus', v => '-' + v);
+bindRange('rangeWater', 'waterPerKg', 'rvWater', v => v.toFixed(3));
+bindRange('rangeTolerance', 'tolerance', 'rvTolerance', v => v);
+
+// ===== PHOTO UPLOAD =====
+$('photoPreview').addEventListener('click', () => $('photoInput').click());
+$('photoInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        currentPhoto = ev.target.result;
+        $('photoPreview').innerHTML = `<img src="${currentPhoto}" alt="صورة">`;
+    };
+    reader.readAsDataURL(file);
+});
+
+// ===== SAVE PERSON =====
+$('savePersonBtn').addEventListener('click', () => {
+    const name = $('fName').value.trim();
+    const phone = $('fPhone').value.trim();
+    const weight = parseFloat($('fWeight').value);
+    const height = parseFloat($('fHeight').value);
+    const age = parseInt($('fAge').value) || 25;
+    const gender = $('fGender').value;
+    const activity = $('fActivity').value;
+    const notes = $('fNotes').value.trim();
+
+    if (!name) { showToast('⚠️ أدخل الاسم'); return; }
+    if (!weight || weight <= 0) { showToast('⚠️ أدخل وزناً صحيحاً'); return; }
+    if (!height || height <= 0) { showToast('⚠️ أدخل طولاً صحيحاً'); return; }
+
+    if (editingId) {
+        const idx = people.findIndex(p => p.id === editingId);
+        if (idx >= 0) {
+            people[idx] = { ...people[idx], name, phone, weight, height, age, gender, activity, notes, photo: currentPhoto || people[idx].photo };
+            showToast('✅ تم تحديث البيانات');
+        }
+        cancelEdit();
+    } else {
+        people.push({
+            id: uid(), name, phone, weight, height, age, gender, activity, notes,
+            photo: currentPhoto || null,
+            createdAt: Date.now()
+        });
+        showToast('✅ تم إضافة الشخص');
+    }
+    save();
+    resetForm();
+    renderManage();
+    renderDashboard();
+});
+
+function resetForm() {
+    $('fName').value = '';
+    $('fPhone').value = '';
+    $('fWeight').value = '';
+    $('fHeight').value = '';
+    $('fAge').value = '25';
+    $('fGender').value = 'male';
+    $('fActivity').value = '1.375';
+    $('fNotes').value = '';
+    $('photoPreview').innerHTML = '📷';
+    $('photoInput').value = '';
+    currentPhoto = null;
+}
+function cancelEdit() {
+    editingId = null;
+    resetForm();
+    $('formTitle').textContent = '➕ إضافة شخص جديد';
+    $('cancelEditBtn').style.display = 'none';
+    $('savePersonBtn').textContent = '💾 حفظ الشخص';
+}
+$('resetFormBtn').addEventListener('click', () => { cancelEdit(); showToast('↺ تم إعادة التعيين'); });
+$('cancelEditBtn').addEventListener('click', cancelEdit);
+
+// ===== RENDER: MANAGE LIST =====
+function renderManage() {
+    $('peopleCount').textContent = people.length;
+    const el = $('manageList');
+    if (people.length === 0) {
+        el.innerHTML = `<div class="empty-state"><div class="icon">👤</div>لا يوجد أشخاص بعد. أضف أول شخص من النموذج أعلاه.</div>`;
+        return;
+    }
+    el.innerHTML = `<div class="people-grid">${people.map(p => {
+        const bmi = calcBMI(p.weight, p.height);
+        const cat = getCategory(bmi);
+        const { ideal } = getDiffInfo(p);
+        return `
+            <div class="person-card">
+                <div class="person-head">
+                    <div class="avatar">${p.photo ? `<img src="${p.photo}" alt="">` : escapeHtml(p.name.charAt(0))}</div>
+                    <div class="person-info">
+                        <h3>${escapeHtml(p.name)}</h3>
+                        <div class="person-meta">${p.age} سنة • ${p.gender === 'female' ? 'أنثى' : 'ذكر'}</div>
+                        ${p.phone ? `<div class="person-contact">📞 ${escapeHtml(p.phone)}</div>` : ''}
+                    </div>
+                </div>
+                <div class="person-bmi-row">
+                    <div class="person-bmi" style="color:${cat.color}">${bmi.toFixed(1)}</div>
+                    <span class="person-status ${cat.cls}">${cat.label}</span>
+                </div>
+                <div class="person-diff">
+                    <span>الوزن المثالي</span>
+                    <strong style="color:${cat.color}">${ideal.toFixed(1)} كجم</strong>
+                </div>
+                ${p.notes ? `<div class="person-notes">📝 ${escapeHtml(p.notes)}</div>` : ''}
+                <div class="person-actions">
+                    <button onclick="editPerson('${p.id}')">✏️ تعديل</button>
+                    <button onclick="sharePerson('${p.id}')">📤 مشاركة</button>
+                    <button onclick="deletePerson('${p.id}')" style="color:var(--c-fat);">🗑️</button>
+                </div>
+            </div>
+        `;
+    }).join('')}</div>`;
+}
+
+window.editPerson = function(id) {
+    const p = people.find(x => x.id === id);
+    if (!p) return;
+    editingId = id;
+    $('fName').value = p.name;
+    $('fPhone').value = p.phone || '';
+    $('fWeight').value = p.weight;
+    $('fHeight').value = p.height;
+    $('fAge').value = p.age;
+    $('fGender').value = p.gender;
+    $('fActivity').value = p.activity || '1.375';
+    $('fNotes').value = p.notes || '';
+    currentPhoto = p.photo;
+    $('photoPreview').innerHTML = p.photo ? `<img src="${p.photo}" alt="">` : '📷';
+    $('formTitle').textContent = '✏️ تعديل بيانات: ' + p.name;
+    $('savePersonBtn').textContent = '💾 تحديث';
+    $('cancelEditBtn').style.display = 'inline-flex';
+    document.querySelector('.tab-btn[data-tab="manage"]').click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.deletePerson = function(id) {
+    const p = people.find(x => x.id === id);
+    if (!p) return;
+    if (!confirm(`هل تريد حذف "${p.name}"؟`)) return;
+    people = people.filter(x => x.id !== id);
+    save();
+    renderManage();
+    renderDashboard();
+    renderCompare();
+    renderPlanSelect();
+    showToast('🗑️ تم الحذف');
+};
+
+window.sharePerson = function(id) {
+    const p = people.find(x => x.id === id);
+    if (!p) return;
+    openShareModal(p);
+};
+
+// ===== RENDER: DASHBOARD =====
+function renderDashboard() {
+    const el = $('dashboardContent');
+    if (people.length === 0) {
+        el.innerHTML = `<div class="card"><div class="empty-state"><div class="icon">👥</div>لا يوجد أشخاص. اذهب إلى تبويب "إدارة" لإضافة أول شخص.<br><br><button class="btn btn-primary" onclick="document.querySelector('.tab-btn[data-tab=manage]').click()">➕ إضافة شخص</button></div></div>`;
+        return;
+    }
+    const sorted = [...people].map(p => {
+        const bmi = calcBMI(p.weight, p.height);
+        const { ideal, diff } = getDiffInfo(p);
+        return { ...p, bmi, ideal, absDiff: Math.abs(diff), realDiff: diff };
+    }).sort((a, b) => a.absDiff - b.absDiff);
+
+    el.innerHTML = `
+        <div class="card">
+            <div class="section-title">📊 نظرة عامة</div>
+            <div class="compare-bar" id="dashCompareBar"></div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:0.75rem; margin-top:10px; color:var(--text-main);">
+                <span><span style="display:inline-block;width:12px;height:12px;background:var(--c-thin);border-radius:3px;margin-left:4px;vertical-align:middle;"></span>نحافة</span>
+                <span><span style="display:inline-block;width:12px;height:12px;background:var(--c-normal);border-radius:3px;margin-left:4px;vertical-align:middle;"></span>طبيعي</span>
+                <span><span style="display:inline-block;width:12px;height:12px;background:var(--c-fat);border-radius:3px;margin-left:4px;vertical-align:middle;"></span>سمنة</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">🏆 الترتيب (الأقرب للوزن المثالي أولاً)</div>
+            <div class="people-grid">
+                ${sorted.map((p, i) => {
+                    const cat = getCategory(p.bmi);
+                    const diffText = p.realDiff > 0
+                        ? `ينقص <strong style="color:var(--c-fat)">${p.absDiff.toFixed(1)} كجم</strong>`
+                        : (p.realDiff < 0
+                            ? `يزيد <strong style="color:var(--c-thin)">${p.absDiff.toFixed(1)} كجم</strong>`
+                            : `<strong style="color:var(--c-normal)">وزن مثالي! 🎯</strong>`);
+                    return `
+                        <div class="person-card ${i === 0 ? 'rank-1' : ''}">
+                            <div class="person-head">
+                                <div class="avatar">${p.photo ? `<img src="${p.photo}" alt="">` : escapeHtml(p.name.charAt(0))}</div>
+                                <div class="person-info">
+                                    <h3>${escapeHtml(p.name)}</h3>
+                                    <div class="person-meta">المرتبة ${i+1} • ${p.age} سنة</div>
+                                </div>
+                            </div>
+                            <div class="person-bmi-row">
+                                <div class="person-bmi" style="color:${cat.color}">${p.bmi.toFixed(1)}</div>
+                                <span class="person-status ${cat.cls}">${cat.label}</span>
+                            </div>
+                            <div class="person-diff">${diffText}</div>
+                            <div class="person-actions">
+                                <button onclick="sharePerson('${p.id}')">📤 مشاركة</button>
+                                <button onclick="showPlanFor('${p.id}')">📋 الخطة</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+    `;
+    renderCompareBar('dashCompareBar');
+}
+
+window.showPlanFor = function(id) {
+    document.querySelector('.tab-btn[data-tab="plan"]').click();
+    setTimeout(() => {
+        $('planPersonSelect').value = id;
+        renderPlan();
+    }, 50);
+};
+
+// ===== COMPARE BAR =====
+function renderCompareBar(targetId) {
+    const el = $(targetId);
+    if (!el) return;
+    const counts = { thin: 0, normal: 0, fat: 0 };
+    people.forEach(p => {
+        const bmi = calcBMI(p.weight, p.height);
+        counts[getCategory(bmi).key]++;
+    });
+    const total = people.length || 1;
+    el.innerHTML = `
+        ${counts.thin ? `<div class="compare-seg seg-thin" style="flex:${counts.thin}">${counts.thin}</div>` : ''}
+        ${counts.normal ? `<div class="compare-seg seg-normal" style="flex:${counts.normal}">${counts.normal}</div>` : ''}
+        ${counts.fat ? `<div class="compare-seg seg-fat" style="flex:${counts.fat}">${counts.fat}</div>` : ''}
+        ${total === 0 ? '<div class="compare-seg" style="flex:1; background:rgba(255,255,255,0.1);">لا بيانات</div>' : ''}
+    `;
+}
+
+// ===== RENDER: COMPARE =====
+function renderCompare() {
+    renderCompareBar('compareBar');
+    const el = $('compareList');
+    if (people.length === 0) {
+        el.innerHTML = `<div class="empty-state"><div class="icon">📊</div>لا توجد بيانات للمقارنة</div>`;
+        return;
+    }
+    const sorted = [...people].map(p => {
+        const bmi = calcBMI(p.weight, p.height);
+        const { ideal, diff } = getDiffInfo(p);
+        return { ...p, bmi, ideal, absDiff: Math.abs(diff), realDiff: diff };
+    }).sort((a, b) => a.absDiff - b.absDiff);
+
+    el.innerHTML = `<div class="people-grid">${sorted.map((p, i) => {
+        const cat = getCategory(p.bmi);
+        return `
+            <div class="person-card ${i === 0 ? 'rank-1' : ''}">
+                <div class="person-head">
+                    <div class="avatar">${p.photo ? `<img src="${p.photo}" alt="">` : escapeHtml(p.name.charAt(0))}</div>
+                    <div class="person-info">
+                        <h3>${escapeHtml(p.name)}</h3>
+                        <div class="person-meta">المرتبة ${i+1}</div>
+                    </div>
+                </div>
+                <div class="person-bmi-row">
+                    <div class="person-bmi" style="color:${cat.color}">${p.bmi.toFixed(1)}</div>
+                    <span class="person-status ${cat.cls}">${cat.label}</span>
+                </div>
+                <div class="person-diff"><span>الوزن الحالي</span><strong>${p.weight.toFixed(1)} كجم</strong></div>
+                <div class="person-diff"><span>الوزن المثالي</span><strong style="color:${cat.color}">${p.ideal.toFixed(1)} كجم</strong></div>
+                <div class="person-diff">
+                    <span>الفرق</span>
+                    <strong style="color:${p.realDiff > 0 ? 'var(--c-fat)' : (p.realDiff < 0 ? 'var(--c-thin)' : 'var(--c-normal)')}">
+                        ${p.realDiff > 0 ? '-' : (p.realDiff < 0 ? '+' : '')}${Math.abs(p.realDiff).toFixed(1)} كجم
+                    </strong>
+                </div>
+            </div>
+        `;
+    }).join('')}</div>`;
+}
+
+// ===== RENDER: PLAN =====
+function renderPlanSelect() {
+    const sel = $('planPersonSelect');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">-- اختر شخصاً --</option>' +
+        people.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+    if (cur && people.find(p => p.id === cur)) sel.value = cur;
+    if (sel.value) renderPlan();
+    else $('planContent').innerHTML = `<div class="card"><div class="empty-state"><div class="icon">📋</div>اختر شخصاً لعرض خطته الغذائية</div></div>`;
+}
+$('planPersonSelect').addEventListener('change', renderPlan);
+
+function renderPlan() {
+    const id = $('planPersonSelect').value;
+    const p = people.find(x => x.id === id);
+    const el = $('planContent');
+    if (!p) {
+        el.innerHTML = `<div class="card"><div class="empty-state"><div class="icon">📋</div>اختر شخصاً لعرض خطته</div></div>`;
+        return;
+    }
+    const bmi = calcBMI(p.weight, p.height);
+    const cat = getCategory(bmi);
+    const { ideal, diff } = getDiffInfo(p);
+    const calories = getCalories(p.weight, p.height, p.age, p.gender, p.activity);
+    const water = getWater(p.weight);
+    const absDiff = Math.abs(diff);
+
+    let planTitle, planDesc, planColor, planIcon, adjustedCal;
+    if (cat.key === 'normal') {
+        planTitle = 'خطة الثبات';
+        planDesc = `وزنك مثالي! حافظ على نمطك الحالي. استمر في تناول ${calories} سعرة يومياً وشرب ${water} لتر ماء.`;
+        planColor = 'var(--c-normal)';
+        planIcon = '✅';
+        adjustedCal = calories;
+    } else if (cat.key === 'thin') {
+        planTitle = 'خطة الزيادة الصحية';
+        adjustedCal = calories + settings.deficit;
+        planDesc = `تحتاج لزيادة ${absDiff.toFixed(1)} كجم للوصول للوزن المثالي (${ideal.toFixed(1)} كجم). زد سعراتك اليومية تدريجياً إلى ${adjustedCal} سعرة.`;
+        planColor = 'var(--c-thin)';
+        planIcon = '📈';
+    } else {
+        planTitle = 'خطة النقصان الصحية';
+        adjustedCal = calories - settings.surplus;
+        planDesc = `تحتاج لإنقاص ${absDiff.toFixed(1)} كجم للوصول للوزن المثالي (${ideal.toFixed(1)} كجم). قلل سعراتك اليومية تدريجياً إلى ${adjustedCal} سعرة.`;
+        planColor = 'var(--c-fat)';
+        planIcon = '📉';
+    }
+
+    el.innerHTML = `
+        <div class="plan-card" style="border-color:${planColor};">
+            <h3 style="color:${planColor};">${planIcon} ${planTitle} — ${escapeHtml(p.name)}</h3>
+            <p>${planDesc}</p>
+            <div class="person-diff" style="margin-top:10px;">
+                <span>الوزن الحالي: <strong>${p.weight.toFixed(1)} كجم</strong></span>
+                <span>المثالي: <strong style="color:${planColor}">${ideal.toFixed(1)} كجم</strong></span>
+            </div>
+            <div class="person-diff">
+                <span>السعرات الموصى بها: <strong>${adjustedCal} سعرة</strong></span>
+                <span>الماء: <strong>${water} لتر</strong></span>
+            </div>
+            ${p.notes ? `<div class="person-notes" style="margin-top:10px;">📝 ${escapeHtml(p.notes)}</div>` : ''}
+        </div>
+
+        <div class="card">
+            <div class="section-title">🍎 توصيات غذائية</div>
+            <div class="meal-tips">${getFoodTips(cat.key)}</div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">📅 جدول أسبوعي مقترح</div>
+            <div class="week-grid">${getWeekPlan(cat.key)}</div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">💪 نصائح إضافية</div>
+            <div class="meal-tips">${getExtraTips(cat.key)}</div>
+        </div>
+    `;
+}
+
+function getFoodTips(key) {
+    if (key === 'thin') {
+        return `
+            <div class="tip"><div class="tip-icon">🥑</div><h4>دهون صحية</h4><p>أفوكادو، زيت زيتون، مكسرات، بذور شيا.</p></div>
+            <div class="tip"><div class="tip-icon">🍗</div><h4>بروتين عالي</h4><p>دجاج، سمك، بيض، تونة، لحوم حمراء.</p></div>
+            <div class="tip"><div class="tip-icon">🍚</div><h4>كربوهيدرات معقدة</h4><p>أرز، شوفان، بطاطا حلوة، خبز أسمر.</p></div>
+            <div class="tip"><div class="tip-icon">🥛</div><h4>سعرات سائلة</h4><p>حليب كامل، عصائر طبيعية، سموذي بالمكسرات.</p></div>
+            <div class="tip"><div class="tip-icon">🍌</div><h4>وجبات خفيفة</h4><p>موز، زبدة فول سوداني، جبن، تمر بالحليب.</p></div>
+            <div class="tip"><div class="tip-icon">🥜</div><h4>زيادة تدريجية</h4><p>أضف ${settings.deficit} سعرة يومياً حتى الوصول للهدف.</p></div>
+        `;
+    }
+    if (key === 'fat') {
+        return `
+            <div class="tip"><div class="tip-icon">🥗</div><h4>خضروات ورقية</h4><p>سبانخ، خس، كرنب، بروكلي — قليلة السعرات وغنية بالألياف.</p></div>
+            <div class="tip"><div class="tip-icon">🍗</div><h4>بروتين مشوي</h4><p>صدر دجاج، سمك مشوي، بياض بيض، تونة بالماء.</p></div>
+            <div class="tip"><div class="tip-icon">🍓</div><h4>فواكه منخفضة السكر</h4><p>فراولة، تفاح، جوافة، برتقال، كيوي.</p></div>
+            <div class="tip"><div class="tip-icon">💧</div><h4>ماء قبل الأكل</h4><p>اشرب كوبين ماء قبل كل وجبة لتقليل الشهية.</p></div>
+            <div class="tip"><div class="tip-icon">🚫</div><h4>تجنب</h4><p>السكريات، المقليات، المشروبات الغازية، الوجبات السريعة.</p></div>
+            <div class="tip"><div class="tip-icon">⏰</div><h4>الصيام المتقطع</h4><p>نظام 16:8 قد يساعد في حرق الدهون.</p></div>
+        `;
+    }
+    return `
+        <div class="tip"><div class="tip-icon">🥗</div><h4>توازن غذائي</h4><p>نصف الطبق خضار، ربع بروتين، ربع كربوهيدرات معقدة.</p></div>
+        <div class="tip"><div class="tip-icon">🍎</div><h4>5 حصص فواكه</h4><p>تنوع الألوان يضمن حصولك على مضادات الأكسدة.</p></div>
+        <div class="tip"><div class="tip-icon">💧</div><h4>ترطيب</h4><p>اشرب ${(settings.waterPerKg * 70).toFixed(1)} لتر ماء يومياً على الأقل.</p></div>
+        <div class="tip"><div class="tip-icon">🏃</div><h4>نشاط بدني</h4><p>150 دقيقة أسبوعياً من المشي أو التمارين المعتدلة.</p></div>
+        <div class="tip"><div class="tip-icon">😴</div><h4>نوم كافٍ</h4><p>7-9 ساعات يومياً لتنظيم الهرمونات.</p></div>
+        <div class="tip"><div class="tip-icon">🧘</div><h4>تقليل التوتر</h4><p>التأمل والتنفس العميق يقلل الكورتيزول.</p></div>
+    `;
+}
+
+function getWeekPlan(key) {
+    const days = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+    const plans = {
+        thin: [
+            'فطور: شوفان بالحليب والموز + مكسرات | غداء: أرز + دجاج + أفوكادو | عشاء: سموذي + تمر',
+            'فطور: بيض + خبز أسمر + زبدة فول | غداء: مكرونة بالبشاميل | عشاء: جبن + فواكه',
+            'فطور: فول + زيت زيتون + خبز | غداء: كبسة لحم | عشاء: حليب + تمر + مكسرات',
+            'فطور: عسل + طحينة + خبز | غداء: سمك مشوي + أرز | عشاء: بطاطا حلوة مشوية',
+            'فطور: جبن + زيتون + خبز | غداء: شاورما دجاج | عشاء: سموذي مانجو + لوز',
+            'فطور: بيض + أفوكادو | غداء: كفتة + أرز + سلطة | عشاء: زبادي + عسل + مكسرات',
+            'فطور: بان كيك + عسل | غداء: مقلوبة دجاج | عشاء: فواكه + جبن'
+        ],
+        fat: [
+            'فطور: بياض بيض + خضار | غداء: صدر دجاج مشوي + سلطة | عشاء: زبادي يوناني + خيار',
+            'فطور: شوفان بالماء + تفاح | غداء: سمك مشوي + خضار سوتيه | عشاء: سلطة تونة',
+            'فطور: جبن قريش + خيار | غداء: سلطة دجاج + خبز أسمر | عشاء: شوربة خضار',
+            'فطور: بيض مسلوق + خس | غداء: كباب مشوي + سلطة | عشاء: زبادي + فراولة',
+            'فطور: زبادي + بذور شيا | غداء: صدر ديك رومي + كينوا | عشاء: سلطة سبانخ + تونة',
+            'فطور: بياض بيض + سبانخ | غداء: سمك سلمون + بروكلي | عشاء: شوربة عدس',
+            'فطور: شوفان + لوز | غداء: صدر دجاج + خضار مشوية | عشاء: سلطة فواكه'
+        ],
+        normal: [
+            'فطور: شوفان + فواكه | غداء: دجاج + أرز + سلطة | عشاء: زبادي + مكسرات',
+            'فطور: بيض + خبز أسمر | غداء: سمك + بطاطا | عشاء: سلطة + جبن',
+            'فطور: فول + خضار | غداء: لحم + خضار | عشاء: شوربة + خبز',
+            'فطور: جبن + زيتون | غداء: مكرونة + دجاج | عشاء: فواكه',
+            'فطور: عسل + طحينة | غداء: كبسة + سلطة | عشاء: زبادي',
+            'فطور: بيض + أفوكادو | غداء: مشاوي مشكلة | عشاء: سلطة تونة',
+            'فطور: بان كيك | غداء: مقلوبة | عشاء: فواكه + مكسرات'
+        ]
+    };
+    return days.map((d, i) => `<div class="day-chip"><strong>${d}</strong>${plans[key][i]}</div>`).join('');
+}
+
+function getExtraTips(key) {
+    if (key === 'thin') {
+        return `
+            <div class="tip"><div class="tip-icon">🏋️</div><h4>تمارين مقاومة</h4><p>3 مرات أسبوعياً لبناء عضلات صحية بدل الدهون.</p></div>
+            <div class="tip"><div class="tip-icon">😴</div><h4>نوم كافٍ</h4><p>النوم يساعد في بناء العضلات وفتح الشهية.</p></div>
+            <div class="tip"><div class="tip-icon">🍽️</div><h4>6 وجبات صغيرة</h4><p>بدل 3 وجبات كبيرة، لتسهيل تناول سعرات أكثر.</p></div>
+            <div class="tip"><div class="tip-icon">📊</div><h4>متابعة أسبوعية</h4><p>سجل وزنك أسبوعياً للتأكد من التقدم.</p></div>
+        `;
+    }
+    if (key === 'fat') {
+        return `
+            <div class="tip"><div class="tip-icon">🚶</div><h4>مشي يومي</h4><p>30-45 دقيقة مشي سريع 5 مرات أسبوعياً.</p></div>
+            <div class="tip"><div class="tip-icon">🏋️</div><h4>تمارين مقاومة</h4><p>تحافظ على العضلات أثناء حرق الدهون.</p></div>
+            <div class="tip"><div class="tip-icon">🍽️</div><h4>أكل ببطء</h4><p>امضغ جيداً وانتظر 20 دقيقة قبل طلب المزيد.</p></div>
+            <div class="tip"><div class="tip-icon">📊</div><h4>متابعة أسبوعية</h4><p>لا تزن نفسك يومياً — أسبوعياً أفضل.</p></div>
+        `;
+    }
+    return `
+        <div class="tip"><div class="tip-icon">🏃</div><h4>استمر في النشاط</h4><p>150 دقيقة أسبوعياً من التمارين المعتدلة.</p></div>
+        <div class="tip"><div class="tip-icon">💧</div><h4>ترطيب</h4><p>اشرب الماء بانتظام طوال اليوم.</p></div>
+        <div class="tip"><div class="tip-icon">😴</div><h4>نوم صحي</h4><p>7-9 ساعات يومياً.</p></div>
+        <div class="tip"><div class="tip-icon">🧘</div><h4>تقليل التوتر</h4><p>ممارسة التأمل أو اليوغا.</p></div>
+    `;
+}
+
+// ===== SHARE MODAL =====
+function openShareModal(person) {
+    const bmi = calcBMI(person.weight, person.height);
+    const cat = getCategory(bmi);
+    const { ideal, diff } = getDiffInfo(person);
+    const absDiff = Math.abs(diff);
+
+    modalContent.innerHTML = `
+        <h2>📤 مشاركة نتيجة — ${escapeHtml(person.name)}</h2>
+        <div class="person-card" style="margin-bottom:14px;">
+            <div class="person-head">
+                <div class="avatar">${person.photo ? `<img src="${person.photo}" alt="">` : escapeHtml(person.name.charAt(0))}</div>
+                <div class="person-info">
+                    <h3>${escapeHtml(person.name)}</h3>
+                    <div class="person-meta">${person.age} سنة • ${person.gender === 'female' ? 'أنثى' : 'ذكر'}</div>
+                    ${person.phone ? `<div class="person-contact">📞 ${escapeHtml(person.phone)}</div>` : ''}
+                </div>
+            </div>
+            <div class="person-bmi-row">
+                <div class="person-bmi" style="color:${cat.color}">${bmi.toFixed(1)}</div>
+                <span class="person-status ${cat.cls}">${cat.label}</span>
+            </div>
+            <div class="person-diff"><span>الوزن المثالي</span><strong>${ideal.toFixed(1)} كجم</strong></div>
+            <div class="person-diff"><span>الفرق</span><strong style="color:${diff > 0 ? 'var(--c-fat)' : (diff < 0 ? 'var(--c-thin)' : 'var(--c-normal)')}">${diff > 0 ? 'ينقص ' + absDiff.toFixed(1) : (diff < 0 ? 'يزيد ' + absDiff.toFixed(1) : 'مثالي')} كجم</strong></div>
+        </div>
+        <div class="share-list">
+            <button id="mShareImage">🖼️ مشاركة كصورة</button>
+            <button id="mShareText">📝 مشاركة كنص</button>
+            <button id="mShareWhatsapp">💬 واتساب</button>
+            <button id="mShareTelegram">✈️ تيليجرام</button>
+            <button id="mShareCopy">📋 نسخ النتيجة</button>
+            ${person.phone ? `<button id="mShareSMS" style="background:rgba(0,224,184,0.12); border-color:var(--primary);">📱 إرسال SMS إلى ${escapeHtml(person.phone)}</button>` : ''}
+        </div>
+        <div class="modal-actions">
+            <button class="btn" id="mClose">إغلاق</button>
+        </div>
+    `;
+    modalOverlay.classList.add('show');
+    $('mClose').onclick = () => modalOverlay.classList.remove('show');
+    $('mShareImage').onclick = () => { shareAsImage(person); modalOverlay.classList.remove('show'); };
+    $('mShareText').onclick = () => { shareAsText(person); modalOverlay.classList.remove('show'); };
+    $('mShareWhatsapp').onclick = () => { shareWhatsapp(person); modalOverlay.classList.remove('show'); };
+    $('mShareTelegram').onclick = () => { shareTelegram(person); modalOverlay.classList.remove('show'); };
+    $('mShareCopy').onclick = () => {
+        const txt = buildTextResult(person);
+        navigator.clipboard.writeText(txt).then(() => showToast('📋 تم النسخ')).catch(() => {
+            const ta = document.createElement('textarea'); ta.value = txt;
+            document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+            document.body.removeChild(ta); showToast('📋 تم النسخ');
+        });
+        modalOverlay.classList.remove('show');
+    };
+    if ($('mShareSMS') && person.phone) {
+        $('mShareSMS').onclick = () => {
+            const txt = encodeURIComponent(buildTextResult(person));
+            window.location.href = `sms:${person.phone}?body=${txt}`;
+            modalOverlay.classList.remove('show');
+        };
+    }
+}
+modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('show');
+});
+
+function buildTextResult(p) {
+    const bmi = calcBMI(p.weight, p.height);
+    const cat = getCategory(bmi);
+    const { ideal, diff } = getDiffInfo(p);
+    const absDiff = Math.abs(diff);
+    const calories = getCalories(p.weight, p.height, p.age, p.gender, p.activity);
+    const water = getWater(p.weight);
+    const diffLine = diff > 0 ? `ينقص: ${absDiff.toFixed(1)} كجم` : (diff < 0 ? `يزيد: ${absDiff.toFixed(1)} كجم` : `وزن مثالي 🎯`);
+    return `⚖️ تقرير الوزن — ${p.name}
+━━━━━━━━━━━━━━━
+📊 مؤشر كتلة الجسم: ${bmi.toFixed(1)} (${cat.label})
+📏 الطول: ${p.height} سم | الوزن: ${p.weight} كجم
+🎯 الوزن المثالي: ${ideal.toFixed(1)} كجم
+📉 ${diffLine}
+🔥 السعرات اليومية: ${calories} سعرة
+💧 الماء اليومي: ${water} لتر
+${p.notes ? '📝 ملاحظات: ' + p.notes + '\n' : ''}━━━━━━━━━━━━━━━
+© AhmdSchool | A.S@programmer.net`;
+}
+
+function shareAsText(p) {
+    const text = buildTextResult(p);
+    if (navigator.share) navigator.share({ title: 'تقرير الوزن', text }).catch(() => {});
+    else navigator.clipboard.writeText(text).then(() => showToast('📋 تم نسخ النص'));
+}
+function shareWhatsapp(p) {
+    window.open(`https://wa.me/?text=${encodeURIComponent(buildTextResult(p))}`, '_blank');
+}
+function shareTelegram(p) {
+    window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(buildTextResult(p))}`, '_blank');
+}
+
+// ===== SHARE AS IMAGE =====
+function shareAsImage(p) {
+    const bmi = calcBMI(p.weight, p.height);
+    const cat = getCategory(bmi);
+    const { ideal, diff } = getDiffInfo(p);
+    const absDiff = Math.abs(diff);
+    const calories = getCalories(p.weight, p.height, p.age, p.gender, p.activity);
+    const water = getWater(p.weight);
+
+    const scale = 2;
+    const W = 500, H = 760;
+    const canvas = document.createElement('canvas');
+    canvas.width = W * scale;
+    canvas.height = H * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, '#0b0f1c');
+    grad.addColorStop(1, '#1a1f33');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = 'rgba(25,30,50,0.92)';
+    roundRect(ctx, 20, 20, W-40, H-40, 28);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = '#00e0b8';
+    ctx.font = 'bold 26px Segoe UI, Tahoma, Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('⚖️ تقرير الوزن', W/2, 70);
+
+    const photoY = 100;
+    const photoSize = 90;
+    if (p.photo) {
+        const img = new Image();
+        img.onload = () => {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(W/2, photoY + photoSize/2, photoSize/2, 0, Math.PI*2);
+            ctx.clip();
+            ctx.drawImage(img, W/2 - photoSize/2, photoY, photoSize, photoSize);
+            ctx.restore();
+            ctx.strokeStyle = cat.hex;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(W/2, photoY + photoSize/2, photoSize/2, 0, Math.PI*2);
+            ctx.stroke();
+            drawRest();
+        };
+        img.src = p.photo;
+    } else {
+        ctx.fillStyle = cat.hex;
+        ctx.beginPath();
+        ctx.arc(W/2, photoY + photoSize/2, photoSize/2, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#0b0f1c';
+        ctx.font = 'bold 44px Segoe UI, Tahoma, Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.name.charAt(0), W/2, photoY + photoSize/2 + 15);
+        drawRest();
+    }
+
+    function drawRest() {
+        ctx.fillStyle = '#f0f3fa';
+        ctx.font = 'bold 22px Segoe UI, Tahoma, Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.name, W/2, 230);
+
+        ctx.fillStyle = '#a0a8c0';
+        ctx.font = '13px Segoe UI, Tahoma, Arial';
+        ctx.fillText(`${p.age} سنة • ${p.gender === 'female' ? 'أنثى' : 'ذكر'}`, W/2, 255);
+        if (p.phone) ctx.fillText('📞 ' + p.phone, W/2, 275);
+
+        ctx.fillStyle = cat.hex;
+        ctx.font = 'bold 68px Courier New, monospace';
+        ctx.fillText(bmi.toFixed(1), W/2, 360);
+
+        ctx.fillStyle = '#a0a8c0';
+        ctx.font = '13px Segoe UI, Tahoma, Arial';
+        ctx.fillText('مؤشر كتلة الجسم', W/2, 385);
+
+        ctx.fillStyle = cat.hex + '33';
+        roundRect(ctx, W/2 - 70, 405, 140, 36, 18);
+        ctx.fill();
+        ctx.strokeStyle = cat.hex;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.fillStyle = cat.hex;
+        ctx.font = 'bold 16px Segoe UI, Tahoma, Arial';
+        ctx.fillText(cat.label, W/2, 429);
+
+        const rows = [
+            ['الوزن الحالي', p.weight.toFixed(1) + ' كجم'],
+            ['الطول', p.height + ' سم'],
+            ['الوزن المثالي', ideal.toFixed(1) + ' كجم'],
+            ['الفرق', (diff > 0 ? 'ينقص ' : diff < 0 ? 'يزيد ' : '') + absDiff.toFixed(1) + ' كجم'],
+            ['السعرات اليومية', calories + ' سعرة'],
+            ['الماء اليومي', water + ' لتر']
+        ];
+        let y = 490;
+        rows.forEach(([label, value]) => {
+            ctx.fillStyle = '#a0a8c0';
+            ctx.font = '13px Segoe UI, Tahoma, Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText(label, W - 55, y);
+            ctx.fillStyle = '#f0f3fa';
+            ctx.font = 'bold 15px Courier New, monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText(value, 55, y);
+            y += 32;
+        });
+
+        if (p.notes) {
+            ctx.fillStyle = 'rgba(0,224,184,0.08)';
+            roundRect(ctx, 40, y + 4, W - 80, 50, 12);
+            ctx.fill();
+            ctx.fillStyle = '#a0a8c0';
+            ctx.font = '11px Segoe UI, Tahoma, Arial';
+            ctx.textAlign = 'right';
+            const truncated = p.notes.length > 60 ? p.notes.slice(0, 60) + '...' : p.notes;
+            ctx.fillText('📝 ' + truncated, W - 55, y + 26);
+        }
+
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.font = '11px Segoe UI, Tahoma, Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('© AhmdSchool | A.S@programmer.net', W/2, H - 35);
+        ctx.fillText('⚖️ حاسبة الوزن', W/2, H - 55);
+
+        canvas.toBlob((blob) => {
+            const file = new File([blob], `تقرير_${p.name}.png`, { type: 'image/png' });
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({ title: 'تقرير الوزن', files: [file] }).catch(() => {});
+            } else {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `تقرير_${p.name}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('🖼️ تم تحميل الصورة');
+            }
+        }, 'image/png');
+    }
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+    if (r > w/2) r = w/2;
+    if (r > h/2) r = h/2;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+}
+
+// ============================================
+// ===== GUEST CALCULATOR =====
+// ============================================
+$('gCalcBtn').addEventListener('click', runGuestCalc);
+$('gResetBtn').addEventListener('click', () => {
+    $('gWeight').value = '';
+    $('gHeight').value = '';
+    $('gAge').value = '25';
+    $('gGender').value = 'male';
+    $('gActivity').value = '1.375';
+    $('guestResult').innerHTML = '';
+    showToast('↺ تم المسح');
+});
+
+function runGuestCalc() {
+    const weight = parseFloat($('gWeight').value);
+    const height = parseFloat($('gHeight').value);
+    const age = parseInt($('gAge').value) || 25;
+    const gender = $('gGender').value;
+    const activity = $('gActivity').value;
+
+    if (!weight || weight <= 0) { showToast('⚠️ أدخل وزناً صحيحاً'); return; }
+    if (!height || height <= 0) { showToast('⚠️ أدخل طولاً صحيحاً'); return; }
+
+    const bmi = calcBMI(weight, height);
+    const cat = getCategory(bmi);
+    const ideal = getIdealWeight(height, gender, age);
+    const diff = weight - ideal;
+    const absDiff = Math.abs(diff);
+    const calories = getCalories(weight, height, age, gender, activity);
+    const water = (weight * settings.waterPerKg).toFixed(1);
+    const tolerance = settings.tolerance;
+
+    const pct = Math.min(Math.max((bmi - 10) / 30, 0), 1);
+    const ringOffset = 628 * (1 - pct);
+    const toleranceOK = absDiff <= tolerance;
+    const targetProgress = toleranceOK ? 100 : Math.max(0, Math.min(100, 100 - (absDiff / 20 * 100)));
+
+    let expertTitle, expertText, expertIcon;
+    if (cat.key === 'normal' && toleranceOK) {
+        expertTitle = 'أنت في المنطقة المثالية! 🎯';
+        expertText = `مؤشر كتلة جسمك ${bmi.toFixed(1)} يقع في النطاق الصحي. حافظ على نظامك الغذائي الحالي، وواصل شرب ${water} لتر ماء يومياً، ومارس 150 دقيقة نشاط أسبوعياً. ننصح بفحص دوري كل 6 أشهر.`;
+        expertIcon = '🏆';
+    } else if (cat.key === 'normal') {
+        expertTitle = 'وزنك طبيعي لكن قريب من الحد';
+        expertText = `مؤشر كتلة جسمك ${bmi.toFixed(1)} طبيعي. الفرق عن المثالي ${absDiff.toFixed(1)} كجم. راقب وزنك أسبوعياً، وتناول ${calories} سعرة للحفاظ على وزنك.`;
+        expertIcon = '✅';
+    } else if (cat.key === 'thin') {
+        expertTitle = 'تحتاج خطة زيادة صحية';
+        expertText = `مؤشر كتلة جسمك ${bmi.toFixed(1)} (نحافة). تحتاج لزيادة ${absDiff.toFixed(1)} كجم للوصول إلى ${ideal.toFixed(1)} كجم. زد سعراتك اليومية إلى ${calories + settings.deficit} سعرة، ركز على البروتين (1.6-2.2 جم/كجم)، الدهون الصحية، والكربوهيدرات المعقدة. مارس تمارين مقاومة 3 مرات أسبوعياً.`;
+        expertIcon = '📈';
+    } else {
+        expertTitle = 'تحتاج خطة نقصان صحية';
+        expertText = `مؤشر كتلة جسمك ${bmi.toFixed(1)} (سمنة). تحتاج لإنقاص ${absDiff.toFixed(1)} كجم للوصول إلى ${ideal.toFixed(1)} كجم. قلل سعراتك اليومية إلى ${calories - settings.surplus} سعرة، ابدأ بعجز 300-500 سعرة أسبوعياً، واشرب ${water} لتر ماء. ركز على البروتين والألياف، ومارس 45 دقيقة مشي يومياً.`;
+        expertIcon = '📉';
+    }
+
+    const html = `
+        <div class="infographic">
+            <div class="info-ring-wrap">
+                <div class="info-ring">
+                    <svg viewBox="0 0 220 220">
+                        <circle class="ring-bg" cx="110" cy="110" r="100" />
+                        <circle class="ring-fill" cx="110" cy="110" r="100"
+                            stroke="${cat.hex}"
+                            stroke-dashoffset="${ringOffset}"
+                            style="color:${cat.hex};" />
+                    </svg>
+                    <div class="ring-center">
+                        <div class="rc-value" style="color:${cat.hex}">${bmi.toFixed(1)}</div>
+                        <div class="rc-label">BMI</div>
+                        <div class="rc-status" style="background:${cat.hex}22; color:${cat.hex}; border-color:${cat.hex}">${cat.label}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-tiles">
+                <div class="stat-tile">
+                    <div class="st-icon">🎯</div>
+                    <div class="st-value" style="color:var(--primary)">${ideal.toFixed(1)}</div>
+                    <div class="st-label">الوزن المثالي (كجم)</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="st-icon">${diff > 0 ? '📉' : (diff < 0 ? '📈' : '✅')}</div>
+                    <div class="st-value" style="color:${diff > 0 ? 'var(--c-fat)' : (diff < 0 ? 'var(--c-thin)' : 'var(--c-normal)')}">
+                        ${diff > 0 ? '-' : (diff < 0 ? '+' : '')}${absDiff.toFixed(1)}
+                    </div>
+                    <div class="st-label">${diff > 0 ? 'كجم للنقصان' : (diff < 0 ? 'كجم للزيادة' : 'وزن مثالي')}</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="st-icon">🔥</div>
+                    <div class="st-value" style="color:var(--primary)">${calories}</div>
+                    <div class="st-label">سعرة يومياً</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="st-icon">💧</div>
+                    <div class="st-value" style="color:var(--c-thin)">${water}</div>
+                    <div class="st-label">لتر ماء يومياً</div>
+                </div>
+            </div>
+
+            <div class="target-bar-wrap">
+                <div class="target-bar-header">
+                    <span>نسبة القرب من الهدف الصحي</span>
+                    <span style="color:var(--primary)">${Math.round(targetProgress)}%</span>
+                </div>
+                <div class="target-bar">
+                    <div class="target-bar-fill" style="width:${targetProgress}%;"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-dim); margin-top:6px;">
+                    <span>يحتاج تحسين</span>
+                    <span>مثالي</span>
+                </div>
+            </div>
+
+            <div class="expert-box">
+                <h3>${expertIcon} رأي الخبير الغذائي والعلاجي</h3>
+                <p>${expertText}</p>
+            </div>
+
+            <div class="expert-box" style="border-style:solid; border-color:var(--glass-border); background:rgba(0,0,0,0.2);">
+                <h3 style="color:var(--c-normal);">🥗 توصيات غذائية فورية</h3>
+                <div class="meal-tips" style="margin-top:10px;">
+                    ${getGuestFoodTips(cat.key)}
+                </div>
+            </div>
+
+            <div class="guest-actions">
+                <button class="btn btn-primary" id="guestSaveBtn">💾 حفظ في القائمة</button>
+                <button class="btn" id="guestShareBtn">📤 مشاركة النتيجة</button>
+                <button class="btn" id="guestImageBtn">🖼️ مشاركة كصورة</button>
+                <button class="btn" id="guestPrintBtn">🖨️ طباعة / PDF</button>
+            </div>
+        </div>
+    `;
+
+    $('guestResult').innerHTML = html;
+
+    $('guestSaveBtn').onclick = () => {
+        const name = prompt('أدخل اسم الشخص:');
+        if (!name) return;
+        people.push({
+            id: uid(), name, phone: '', weight, height, age, gender, activity, notes: '',
+            photo: null, createdAt: Date.now()
+        });
+        save();
+        renderManage();
+        renderDashboard();
+        showToast('✅ تم حفظ الشخص: ' + name);
+    };
+
+    $('guestShareBtn').onclick = () => {
+        openShareModal({ name: 'زائر', weight, height, age, gender, activity, notes: '', phone: '' });
+    };
+    $('guestImageBtn').onclick = () => {
+        shareAsImage({ name: 'زائر', weight, height, age, gender, activity, notes: '', phone: '' });
+    };
+    $('guestPrintBtn').onclick = () => window.print();
+}
+
+function getGuestFoodTips(key) {
+    if (key === 'thin') {
+        return `
+            <div class="tip"><div class="tip-icon">🥑</div><h4>دهون صحية</h4><p>أفوكادو، مكسرات، زيت زيتون.</p></div>
+            <div class="tip"><div class="tip-icon">🍗</div><h4>بروتين عالي</h4><p>دجاج، سمك، بيض، لحوم.</p></div>
+            <div class="tip"><div class="tip-icon">🍚</div><h4>كربوهيدرات</h4><p>أرز، شوفان، بطاطا.</p></div>
+            <div class="tip"><div class="tip-icon">🥛</div><h4>سعرات سائلة</h4><p>حليب، سموذي، عصائر.</p></div>
+        `;
+    }
+    if (key === 'fat') {
+        return `
+            <div class="tip"><div class="tip-icon">🥗</div><h4>خضروات</h4><p>سبانخ، بروكلي، خس.</p></div>
+            <div class="tip"><div class="tip-icon">🍗</div><h4>بروتين مشوي</h4><p>دجاج، سمك، بياض بيض.</p></div>
+            <div class="tip"><div class="tip-icon">🍓</div><h4>فواكه منخفضة السكر</h4><p>فراولة، تفاح، جوافة.</p></div>
+            <div class="tip"><div class="tip-icon">💧</div><h4>ماء قبل الأكل</h4><p>كوبان قبل كل وجبة.</p></div>
+        `;
+    }
+    return `
+        <div class="tip"><div class="tip-icon">🥗</div><h4>توازن</h4><p>نصف الطبق خضار.</p></div>
+        <div class="tip"><div class="tip-icon">🍎</div><h4>فواكه</h4><p>5 حصص يومياً.</p></div>
+        <div class="tip"><div class="tip-icon">💧</div><h4>ترطيب</h4><p>ماء بانتظام.</p></div>
+        <div class="tip"><div class="tip-icon">🏃</div><h4>نشاط</h4><p>150 دقيقة أسبوعياً.</p></div>
+    `;
+}
+
+// ===== EXPORT / IMPORT =====
+$('exportBtn').addEventListener('click', () => {
+    const data = {
+        version: '3.1',
+        app: 'AhmdSchool Weight Calculator',
+        exportDate: new Date().toISOString(),
+        settings: settings,
+        people: people
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `بيانات_الوزن_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📦 تم تصدير البيانات');
+});
+
+$('importBtn').addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            try {
+                const data = JSON.parse(ev.target.result);
+                if (data.people && Array.isArray(data.people)) {
+                    if (confirm(`سيتم استيراد ${data.people.length} شخص.\n"موافق" = دمج، "إلغاء" = استبدال`)) {
+                        people = people.concat(data.people);
+                    } else {
+                        people = data.people;
+                    }
+                    if (data.settings) {
+                        settings = Object.assign(settings, data.settings);
+                        saveSettings();
+                        $('rangeDeficit').value = settings.deficit; $('rvDeficit').textContent = '+' + settings.deficit;
+                        $('rangeSurplus').value = settings.surplus; $('rvSurplus').textContent = '-' + settings.surplus;
+                        $('rangeWater').value = settings.waterPerKg; $('rvWater').textContent = settings.waterPerKg.toFixed(3);
+                        $('rangeTolerance').value = settings.tolerance; $('rvTolerance').textContent = settings.tolerance;
+                    }
+                    save();
+                    renderAll();
+                    showToast(`📥 تم استيراد ${data.people.length} شخص`);
+                } else {
+                    showToast('❌ ملف غير صالح');
+                }
+            } catch (err) {
+                showToast('❌ خطأ في قراءة الملف');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+});
+
+// ===== RENDER ALL =====
+function renderAll() {
+    renderDashboard();
+    renderManage();
+    renderCompare();
+    renderPlanSelect();
+}
+
+// ===== INIT =====
+applyTheme(currentTheme);
+renderAll();
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') modalOverlay.classList.remove('show');
+});
+
+})();
+</script>
+</body>
+</html>
