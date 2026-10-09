@@ -25,7 +25,6 @@
     --c-thin: #4facfe;
     --c-normal: #2ed573;
     --c-fat: #ff5e6b;
-    /* Select specific */
     --select-bg: rgba(15,20,35,0.95);
     --select-text: #f0f3fa;
     --select-hover: rgba(0,224,184,0.2);
@@ -330,7 +329,6 @@ body[data-theme="light"] select#planPersonSelect {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23008f7a' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
 }
 
-/* Critical: options inside select must have explicit bg + color */
 .input-box select option,
 select#planPersonSelect option {
     background: var(--select-bg) !important;
@@ -352,7 +350,6 @@ select#planPersonSelect option:checked {
     color: var(--primary) !important;
 }
 
-/* Standalone select (plan tab) */
 select#planPersonSelect {
     background-color: rgba(0,0,0,0.3) !important;
     border:1.5px solid var(--glass-border);
@@ -709,6 +706,204 @@ body[data-theme="light"] .expert-box {
     gap:8px; margin-top:14px;
 }
 
+/* ============================================
+   ABOUT TAB
+   ============================================ */
+.about-hero {
+    background: linear-gradient(135deg, rgba(0,224,184,0.12), rgba(79,172,254,0.08));
+    border:1.5px solid var(--primary);
+    border-radius:22px; padding:28px 20px;
+    text-align:center; margin-bottom:16px;
+    position:relative; overflow:hidden;
+}
+body[data-theme="light"] .about-hero {
+    background: linear-gradient(135deg, rgba(0,143,122,0.08), rgba(79,172,254,0.05));
+}
+.about-hero::before {
+    content:''; position:absolute;
+    top:-80px; right:-80px; width:220px; height:220px;
+    background: radial-gradient(circle, var(--primary-glow), transparent 70%);
+    pointer-events:none;
+}
+.about-logo {
+    width:80px; height:80px; border-radius:24px;
+    background: linear-gradient(135deg, var(--primary), var(--c-normal));
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:42px; box-shadow:0 12px 30px var(--primary-glow);
+    margin-bottom:14px; position:relative; z-index:1;
+}
+.about-hero h2 {
+    font-size:1.5rem; margin-bottom:8px;
+    background: linear-gradient(135deg, var(--primary), var(--c-thin));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    position:relative; z-index:1;
+}
+.about-hero .about-tagline {
+    font-size:0.85rem; color:var(--text-dim);
+    margin-bottom:14px; position:relative; z-index:1;
+    line-height:1.7; max-width:560px; margin-left:auto; margin-right:auto;
+}
+.about-hero .about-badges {
+    display:flex; gap:8px; flex-wrap:wrap;
+    justify-content:center; position:relative; z-index:1;
+}
+.about-badge {
+    padding:6px 14px; border-radius:20px;
+    font-size:0.7rem; font-weight:700;
+    background: rgba(0,224,184,0.12);
+    border:1px solid var(--primary);
+    color: var(--primary);
+}
+body[data-theme="light"] .about-badge { background: rgba(0,143,122,0.1); }
+
+.about-link {
+    display:flex; align-items:center; gap:12px;
+    padding:14px 16px; border-radius:16px;
+    background: rgba(0,0,0,0.25);
+    border:1.5px solid var(--glass-border);
+    text-decoration:none; color:var(--text-main);
+    transition:all 0.25s; margin-bottom:10px;
+}
+body[data-theme="light"] .about-link { background: rgba(255,255,255,0.6); }
+.about-link:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--primary-glow);
+}
+.about-link .link-icon {
+    width:44px; height:44px; border-radius:12px;
+    background: linear-gradient(135deg, var(--primary), var(--c-normal));
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; flex-shrink:0;
+}
+.about-link .link-body { flex:1; text-align:right; }
+.about-link .link-body strong {
+    display:block; font-size:0.9rem; margin-bottom:3px;
+    color: var(--text-main);
+}
+.about-link .link-body span {
+    font-size:0.72rem; color:var(--text-dim);
+    font-family: var(--font-mono); direction:ltr;
+    display:inline-block; word-break:break-all;
+}
+
+.features-table {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap:10px;
+}
+.feature-row {
+    display:flex; align-items:flex-start; gap:12px;
+    padding:12px 14px; border-radius:14px;
+    background: rgba(0,0,0,0.22);
+    border:1px solid var(--glass-border);
+    transition:all 0.25s;
+}
+body[data-theme="light"] .feature-row { background: rgba(255,255,255,0.55); }
+.feature-row:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+.feature-row .f-icon {
+    font-size:1.5rem; flex-shrink:0;
+    width:36px; height:36px; border-radius:10px;
+    background: rgba(0,224,184,0.1);
+    display:flex; align-items:center; justify-content:center;
+}
+.feature-row .f-body { flex:1; }
+.feature-row .f-body strong {
+    display:block; font-size:0.82rem;
+    margin-bottom:3px; color:var(--text-main);
+}
+.feature-row .f-body p {
+    font-size:0.72rem; color:var(--text-dim);
+    line-height:1.5; margin:0;
+}
+
+.tech-chips {
+    display:flex; flex-wrap:wrap; gap:8px;
+}
+.tech-chip {
+    padding:8px 14px; border-radius:12px;
+    background: rgba(0,224,184,0.1);
+    border:1.5px solid var(--glass-border);
+    font-size:0.75rem; font-weight:600;
+    color: var(--text-main);
+    transition:all 0.25s;
+}
+.tech-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.privacy-list {
+    list-style:none; padding:0; margin:0;
+}
+.privacy-list li {
+    padding:10px 14px 10px 14px;
+    font-size:0.78rem; color:var(--text-dim);
+    line-height:1.7;
+    border-bottom:1px solid var(--glass-border);
+    display:flex; align-items:flex-start; gap:10px;
+}
+.privacy-list li:last-child { border-bottom:none; }
+.privacy-list li::before {
+    content:'✓';
+    color: var(--primary);
+    font-weight:800; flex-shrink:0;
+    font-size:0.9rem;
+}
+
+.warning-box {
+    background: linear-gradient(135deg, rgba(255,179,71,0.08), rgba(255,94,107,0.06));
+    border:1.5px solid #ffb347;
+    border-radius:18px; padding:16px;
+    margin-bottom:12px;
+}
+.warning-box h3 {
+    font-size:0.95rem; margin-bottom:10px;
+    color:#ffb347; display:flex; align-items:center; gap:8px;
+}
+.warning-box p {
+    font-size:0.78rem; color:var(--text-dim);
+    line-height:1.8; margin-bottom:8px;
+}
+.warning-box .warn-list {
+    list-style:none; padding:0; margin:8px 0;
+}
+.warning-box .warn-list li {
+    padding:5px 0 5px 18px;
+    font-size:0.75rem; color:var(--text-dim);
+    position:relative;
+}
+.warning-box .warn-list li::before {
+    content:'✕'; position:absolute;
+    right:0; color:#ff5e6b; font-weight:800;
+}
+
+.contact-actions {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:8px; margin-top:12px;
+}
+
+.copyright-box {
+    text-align:center; padding:16px;
+    background: rgba(0,0,0,0.2);
+    border-radius:16px;
+    border:1px solid var(--glass-border);
+    margin-top:10px;
+}
+body[data-theme="light"] .copyright-box { background: rgba(255,255,255,0.5); }
+.copyright-box strong {
+    display:block; font-size:1rem;
+    color: var(--primary); margin-bottom:6px;
+}
+.copyright-box p {
+    font-size:0.75rem; color:var(--text-dim);
+    line-height:1.7; margin:0;
+}
+
 /* Responsive */
 @media (max-width:640px) {
     body { padding:8px; }
@@ -717,13 +912,16 @@ body[data-theme="light"] .expert-box {
     .brand-text p { font-size:0.6rem; }
     .brand-logo { width:38px; height:38px; font-size:20px; }
     .icon-btn { width:40px; height:40px; font-size:16px; }
-    .tab-btn { font-size:0.68rem; padding:9px 6px; min-width:70px; }
+    .tab-btn { font-size:0.68rem; padding:9px 6px; min-width:80px; }
     .people-grid { grid-template-columns:1fr; }
     .form-grid { grid-template-columns:1fr 1fr; }
     .stat-tiles { grid-template-columns:1fr 1fr; }
     .info-ring { width:180px; height:180px; }
     .ring-center .rc-value { font-size:2.4rem; }
     .guest-actions { grid-template-columns:1fr; }
+}
+@media (max-width:520px) {
+    .contact-actions { grid-template-columns:1fr; }
 }
 
 @media (min-width:1024px) {
@@ -772,6 +970,7 @@ body[data-theme="light"] .expert-box {
         <button class="tab-btn" data-tab="compare">📊 مقارنة</button>
         <button class="tab-btn" data-tab="plan">📋 الخطة</button>
         <button class="tab-btn" data-tab="guest">🆓 حاسبة سريعة</button>
+        <button class="tab-btn" data-tab="about">ℹ️ حول التطبيق</button>
     </div>
 
     <!-- ===== TAB: DASHBOARD ===== -->
@@ -955,11 +1154,221 @@ body[data-theme="light"] .expert-box {
         <div id="guestResult"></div>
     </div>
 
+    <!-- ===== TAB: ABOUT ===== -->
+    <div class="tab-panel" id="tab-about">
+        <div class="about-hero">
+            <div class="about-logo">⚖️</div>
+            <h2>حاسبة الوزن</h2>
+            <p class="about-tagline">
+                منصة صحية عربية خفيفة لمتابعة مؤشرات الوزن والطول، وتقدير الاحتياجات اليومية، وتنظيم بيانات أكثر من شخص — تعمل مباشرة من المتصفح دون تثبيت ودون خادم.
+            </p>
+            <div class="about-badges">
+                <span class="about-badge">🌍 عربي بالكامل</span>
+                <span class="about-badge">📴 يعمل أوفلاين</span>
+                <span class="about-badge">🔒 بيانات محلية</span>
+                <span class="about-badge">📱 متجاوب</span>
+            </div>
+        </div>
+
+        <!-- App link -->
+        <div class="card">
+            <div class="section-title">🔗 جرّب التطبيق مباشرة</div>
+            <a class="about-link" href="https://ahmdschool.github.io/health/" target="_blank" rel="noopener">
+                <div class="link-icon">🌐</div>
+                <div class="link-body">
+                    <strong>الموقع الرسمي للتطبيق</strong>
+                    <span>ahmdschool.github.io/health</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Who is it for -->
+        <div class="card">
+            <div class="section-title">🎯 لمن هذا التطبيق؟</div>
+            <div class="features-table">
+                <div class="feature-row">
+                    <div class="f-icon">👨‍👩‍👧‍👦</div>
+                    <div class="f-body">
+                        <strong>للعائلات</strong>
+                        <p>متابعة أوزان جميع أفراد الأسرة في مكان واحد.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🥗</div>
+                    <div class="f-body">
+                        <strong>للمختصين</strong>
+                        <p>أداة مساعدة أولية لعرض ومقارنة بيانات عدة أشخاص.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🧍</div>
+                    <div class="f-body">
+                        <strong>للأفراد</strong>
+                        <p>متابعة الوزن الشخصي بشكل دوري ومنظم.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🌍</div>
+                    <div class="f-body">
+                        <strong>للزوار</strong>
+                        <p>حساب سريع لمؤشر كتلة الجسم دون تسجيل.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="card">
+            <div class="section-title">✨ المزايا الرئيسية</div>
+            <div class="features-table">
+                <div class="feature-row">
+                    <div class="f-icon">🆓</div>
+                    <div class="f-body">
+                        <strong>حاسبة سريعة للزوار</strong>
+                        <p>قراءة أولية فورية دون تسجيل أو حفظ بيانات.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">📊</div>
+                    <div class="f-body">
+                        <strong>مؤشر كتلة الجسم (BMI)</strong>
+                        <p>تصنيف إرشادي وفق الحدود المضمّنة في التطبيق.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">👥</div>
+                    <div class="f-body">
+                        <strong>إدارة متعددة للأشخاص</strong>
+                        <p>إضافة وتعديل بيانات مع صورة وملاحظات وهاتف.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🏆</div>
+                    <div class="f-body">
+                        <strong>لوحة متابعة ومقارنة</strong>
+                        <p>ترتيب تلقائي بحسب القرب من الوزن التقديري.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🍎</div>
+                    <div class="f-body">
+                        <strong>تقديرات غذائية أولية</strong>
+                        <p>سعرات وماء يوميًا مع نطاقات قابلة للتخصيص.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">📋</div>
+                    <div class="f-body">
+                        <strong>خطط غذائية مخصصة</strong>
+                        <p>خطة زيادة/نقصان/ثبات مع جدول أسبوعي.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🎨</div>
+                    <div class="f-body">
+                        <strong>6 مظاهر لونية</strong>
+                        <p>داكن، فاتح، محيط، غروب، غابة، ملكي.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">📤</div>
+                    <div class="f-body">
+                        <strong>مشاركة احترافية</strong>
+                        <p>مشاركة النتيجة كنص أو صورة عبر أي تطبيق.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">📦</div>
+                    <div class="f-body">
+                        <strong>تصدير واستيراد</strong>
+                        <p>نسخة احتياطية بصيغة JSON.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🌐</div>
+                    <div class="f-body">
+                        <strong>واجهة عربية متجاوبة</strong>
+                        <p>تصميم RTL يعمل على كل الشاشات.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="f-icon">🔒</div>
+                    <div class="f-body">
+                        <strong>حفظ محلي آمن</strong>
+                        <p>البيانات تبقى في متصفح المستخدم فقط.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech -->
+        <div class="card">
+            <div class="section-title">🧰 التقنيات المستخدمة</div>
+            <div class="tech-chips">
+                <span class="tech-chip">HTML5</span>
+                <span class="tech-chip">CSS3</span>
+                <span class="tech-chip">JavaScript (Vanilla)</span>
+                <span class="tech-chip">localStorage</span>
+                <span class="tech-chip">SVG</span>
+                <span class="tech-chip">Canvas</span>
+                <span class="tech-chip">📴 يعمل بدون إنترنت</span>
+            </div>
+        </div>
+
+        <!-- Privacy -->
+        <div class="card">
+            <div class="section-title">🔐 الخصوصية والبيانات</div>
+            <ul class="privacy-list">
+                <li>تُحفظ بيانات الأشخاص والإعدادات في التخزين المحلي للمتصفح (localStorage).</li>
+                <li>لا تُرسل أي بيانات إلى أي خادم خارجي.</li>
+                <li>البيانات مرتبطة بالمتصفح والجهاز المستخدمين — لا تنتقل تلقائيًا.</li>
+                <li>مسح بيانات المتصفح قد يؤدي إلى فقدان البيانات — يُنصح بالتصدير الدوري.</li>
+                <li>لا يُنصح بإدخال معلومات صحية حساسة إلا بعد تقييم ملاءمة ذلك.</li>
+            </ul>
+        </div>
+
+        <!-- Warning -->
+        <div class="warning-box">
+            <h3>⚠️ تنبيه صحي مهم</h3>
+            <p>هذا التطبيق <strong>أداة حسابية وتثقيفية أولية</strong>، وليس:</p>
+            <ul class="warn-list">
+                <li>أداة تشخيص طبي.</li>
+                <li>بديلًا عن الطبيب أو اختصاصي التغذية.</li>
+                <li>مرجعًا لاتخاذ قرارات علاجية.</li>
+            </ul>
+            <p>مؤشر كتلة الجسم وتقديرات الوزن والسعرات والماء لا تناسب بالضرورة جميع الحالات، وقد تختلف باختلاف: العمر، الحالة الصحية، الأدوية، الحمل، مستوى النشاط، وعوامل أخرى.</p>
+            <p style="color:#ffb347; font-weight:700; margin-top:10px;">🩺 استشر مختصًا عند الحاجة.</p>
+        </div>
+
+        <!-- Contact -->
+        <div class="card">
+            <div class="section-title">📬 التواصل والاقتراحات</div>
+            <a class="about-link" href="mailto:ahmd@gmx.li">
+                <div class="link-icon">📧</div>
+                <div class="link-body">
+                    <strong>البريد الإلكتروني</strong>
+                    <span>ahmd@gmx.li</span>
+                </div>
+            </a>
+            <div class="contact-actions">
+                <button class="btn btn-primary" id="copyEmailBtn">📋 نسخ البريد</button>
+                <button class="btn" id="shareAboutBtn">📤 مشاركة التعريف</button>
+                <button class="btn" id="downloadReadmeBtn">📥 تحميل README</button>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="copyright-box">
+            <strong>© AhmdSchool</strong>
+            <p>جميع الحقوق محفوظة وفقًا لما هو موضح داخل التطبيق.<br>
+            <em>صحة أوضح… خطوة بخطوة</em></p>
+        </div>
+    </div>
+
     <!-- ===== FOOTER ===== -->
     <div class="footer">
         <div class="copyright">© 2025 AhmdSchool — جميع الحقوق محفوظة</div>
-        <div>للتواصل والاقتراحات: <a href="mailto:ahmd@gmx.li
-">ahmd@gmx.li</a></div>
+        <div>للتواصل والاقتراحات: <a href="mailto:ahmd@gmx.li">ahmd@gmx.li</a></div>
     </div>
 
 </div>
@@ -1055,7 +1464,6 @@ function applyTheme(t) {
     document.querySelectorAll('.theme-swatch').forEach(el => {
         el.classList.toggle('active', el.dataset.theme === t);
     });
-    // Update theme-color meta
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
         const colors = { dark:'#0b0f1c', light:'#eef2f7', ocean:'#021b2e', sunset:'#2d0a1e', forest:'#0a1f14', royal:'#1a0b2e' };
@@ -1649,7 +2057,7 @@ function buildTextResult(p) {
 🔥 السعرات اليومية: ${calories} سعرة
 💧 الماء اليومي: ${water} لتر
 ${p.notes ? '📝 ملاحظات: ' + p.notes + '\n' : ''}━━━━━━━━━━━━━━━
-© AhmdSchool | A.S@programmer.net`;
+© AhmdSchool | ahmd@gmx.li`;
 }
 
 function shareAsText(p) {
@@ -1794,7 +2202,7 @@ function shareAsImage(p) {
         ctx.fillStyle = 'rgba(255,255,255,0.2)';
         ctx.font = '11px Segoe UI, Tahoma, Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('© AhmdSchool | A.S@programmer.net', W/2, H - 35);
+        ctx.fillText('© AhmdSchool | ahmd@gmx.li', W/2, H - 35);
         ctx.fillText('⚖️ حاسبة الوزن', W/2, H - 55);
 
         canvas.toBlob((blob) => {
@@ -2011,10 +2419,150 @@ function getGuestFoodTips(key) {
     `;
 }
 
+// ============================================
+// ===== ABOUT TAB =====
+// ============================================
+const ABOUT_EMAIL = 'ahmd@gmx.li';
+const ABOUT_URL = 'https://ahmdschool.github.io/health/';
+
+const README_CONTENT = `# ⚖️ حاسبة الوزن | AhmdSchool Health
+
+> منصة صحية عربية خفيفة لمتابعة مؤشرات الوزن والطول، وتقدير الاحتياجات اليومية، وتنظيم بيانات أكثر من شخص — تعمل مباشرة من المتصفح دون تثبيت ودون خادم.
+
+🔗 جرّب التطبيق مباشرة: https://ahmdschool.github.io/health/
+
+## 🎯 لمن هذا التطبيق؟
+
+- 👨‍👩‍👧‍👦 للعائلات: لمتابعة أوزان جميع أفراد الأسرة في مكان واحد.
+- 🥗 للمختصين: كأداة مساعدة أولية لعرض ومقارنة بيانات عدة أشخاص.
+- 🧍 للأفراد: لمتابعة الوزن الشخصي بشكل دوري ومنظم.
+- 🌍 للزوار: لحساب سريع لمؤشر كتلة الجسم دون تسجيل.
+
+## ✨ المزايا الرئيسية
+
+- 🆓 حاسبة سريعة للزوار
+- 📊 مؤشر كتلة الجسم (BMI)
+- 👥 إدارة متعددة للأشخاص
+- 🏆 لوحة متابعة ومقارنة
+- 🍎 تقديرات غذائية أولية
+- 📋 خطط غذائية مخصصة
+- 🎨 6 مظاهر لونية
+- 📤 مشاركة احترافية
+- 📦 تصدير واستيراد
+- 🌐 واجهة عربية متجاوبة
+- 🔒 حفظ محلي آمن
+
+## 🧰 التقنيات المستخدمة
+
+- HTML5 — بنية الصفحة.
+- CSS3 — تصميم متجاوب + متغيرات CSS للسمات.
+- JavaScript (Vanilla) — الحسابات والتفاعلات.
+- localStorage — حفظ البيانات محليًا.
+- SVG + Canvas — الرسوم البيانية وتقارير المشاركة.
+
+يعمل بدون إنترنت — ملف واحد مكتفٍ بذاته.
+
+## 🔐 الخصوصية والبيانات
+
+- تُحفظ البيانات في التخزين المحلي للمتصفح (localStorage).
+- لا تُرسل أي بيانات إلى أي خادم خارجي.
+- البيانات مرتبطة بالمتصفح والجهاز المستخدمين.
+- مسح بيانات المتصفح قد يؤدي إلى فقدان البيانات.
+- يُنصح بالتصدير الدوري.
+
+## ⚠️ تنبيه صحي مهم
+
+هذا التطبيق أداة حسابية وتثقيفية أولية، وليس:
+- أداة تشخيص طبي.
+- بديلًا عن الطبيب أو اختصاصي التغذية.
+- مرجعًا لاتخاذ قرارات علاجية.
+
+مؤشر كتلة الجسم وتقديرات الوزن والسعرات والماء لا تناسب بالضرورة جميع الحالات.
+
+🩺 استشر مختصًا عند الحاجة.
+
+## 📬 التواصل
+
+- التطبيق: https://ahmdschool.github.io/health/
+- البريد: ahmd@gmx.li
+
+## © الحقوق
+
+AhmdSchool — جميع الحقوق محفوظة.
+
+صحة أوضح… خطوة بخطوة
+`;
+
+// Copy email
+$('copyEmailBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(ABOUT_EMAIL).then(() => {
+        showToast('📋 تم نسخ البريد: ' + ABOUT_EMAIL);
+    }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = ABOUT_EMAIL;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('📋 تم نسخ البريد');
+    });
+});
+
+// Share about
+$('shareAboutBtn').addEventListener('click', () => {
+    const text = `⚖️ حاسبة الوزن | AhmdSchool Health
+
+منصة صحية عربية خفيفة لمتابعة الوزن والطول، وتقدير الاحتياجات اليومية، وتنظيم بيانات أكثر من شخص — تعمل من المتصفح دون تثبيت.
+
+🔗 جرّبها: ${ABOUT_URL}
+
+✨ المزايا:
+• حاسبة سريعة للزوار
+• إدارة متعددة للأشخاص
+• لوحة متابعة ومقارنة
+• خطط غذائية مخصصة
+• 6 مظاهر لونية
+• مشاركة النتيجة كنص أو صورة
+• تصدير واستيراد JSON
+• 🔒 بيانات محلية آمنة
+
+🩺 تنبيه: أداة تثقيفية، ليست بديلًا طبيًا.
+
+📧 للتواصل: ${ABOUT_EMAIL}`;
+
+    if (navigator.share) {
+        navigator.share({ title: 'حاسبة الوزن | AhmdSchool', text }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('📋 تم نسخ التعريف — الصقه في أي مكان');
+        }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('📋 تم نسخ التعريف');
+        });
+    }
+});
+
+// Download README
+$('downloadReadmeBtn').addEventListener('click', () => {
+    const blob = new Blob([README_CONTENT], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'README.md';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📥 تم تحميل README.md');
+});
+
 // ===== EXPORT / IMPORT =====
 $('exportBtn').addEventListener('click', () => {
     const data = {
-        version: '3.1',
+        version: '3.2',
         app: 'AhmdSchool Weight Calculator',
         exportDate: new Date().toISOString(),
         settings: settings,
